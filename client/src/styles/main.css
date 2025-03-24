@@ -1,0 +1,49 @@
+/* General styles */
+.container {
+  padding: 20px;
+}
+
+/* Table styles */
+.table {
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Card styles */
+.card {
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Form styles */
+.form-control {
+  margin-bottom: 10px;
+}
+
+/* Button spacing */
+.btn {
+  margin-right: 5px;
+}
+
+/* Dashboard stats */
+.display-4 {
+  font-size: 2.5rem;
+  font-weight: 300;
+  margin: 15px 0;
+}
+
+/* Navbar customization */
+.navbar {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+  
+  .display-4 {
+    font-size: 2rem;
+  }
+} 
