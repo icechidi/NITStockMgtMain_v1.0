@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import './Dashboard.css'; // Import the new CSS file
 
 function Dashboard() {
   const [stats, setStats] = useState({
     totalItems: 0,
     lowStockItems: 0,
+    totalUsers: 1, // Example static value for Total Users
+    itemsForRepair: 0, // Example static value for Items for Repair
     recentMovements: []
   });
   const [error, setError] = useState(null);
@@ -18,7 +21,7 @@ function Dashboard() {
       // Fetch items
       const itemsResponse = await fetch('http://localhost:5000/api/items');
       const items = await itemsResponse.json();
-      
+
       // Fetch recent movements
       const movementsResponse = await fetch('http://localhost:5000/api/stock-movements');
       const movements = await movementsResponse.json();
@@ -26,6 +29,8 @@ function Dashboard() {
       setStats({
         totalItems: Array.isArray(items) ? items.length : 0,
         lowStockItems: Array.isArray(items) ? items.filter(item => item.quantity < 10).length : 0,
+        totalUsers: 1, // Example static value
+        itemsForRepair: Array.isArray(items) ? items.filter(item => item.needsRepair).length : 0,
         recentMovements: Array.isArray(movements) ? movements.slice(0, 5) : []
       });
     } catch (error) {
@@ -48,25 +53,52 @@ function Dashboard() {
     <div className="dashboard">
       <h2>Dashboard</h2>
       <div className="row">
-        <div className="col-md-4">
-          <div className="card mb-4">
+        {/* Total Items Box */}
+        <div className="col-md-3">
+          <div className="card mb-4 total-items-box">
             <div className="card-body">
-              <h5 className="card-title">Total Items</h5>
+              <h5 className="card-title"><i className="fas fa-shopping-cart"></i> Total Items</h5>
               <p className="card-text display-4">{stats.totalItems}</p>
               <Link to="/items" className="btn btn-primary">View Items</Link>
             </div>
           </div>
         </div>
-        <div className="col-md-4">
-          <div className="card mb-4">
+
+        {/* Low Stock Items Box */}
+        <div className="col-md-3">
+          <div className="card mb-4 low-stock-box">
             <div className="card-body">
-              <h5 className="card-title">Low Stock Items</h5>
+              <h5 className="card-title"><i className="fas fa-chart-line"></i> Low Stock Items</h5>
               <p className="card-text display-4">{stats.lowStockItems}</p>
               <Link to="/items" className="btn btn-warning">Check Inventory</Link>
             </div>
           </div>
         </div>
+
+        {/* Total Users Box */}
+        <div className="col-md-3">
+          <div className="card mb-4 total-users-box">
+            <div className="card-body">
+              <h5 className="card-title"><i className="fas fa-users"></i> Total Users</h5>
+              <p className="card-text display-4">{stats.totalUsers}</p>
+              <Link to="/users" className="btn btn-orange">View Users</Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Items for Repair Box */}
+        <div className="col-md-3">
+          <div className="card mb-4 items-repair-box">
+            <div className="card-body">
+              <h5 className="card-title"><i className="fas fa-home"></i> Items for Repair</h5>
+              <p className="card-text display-4">{stats.itemsForRepair}</p>
+              <Link to="/repairs" className="btn btn-danger">View Repairs</Link>
+            </div>
+          </div>
+        </div>
       </div>
+
+      {/* Recent Stock Movements */}
       <div className="row">
         <div className="col-12">
           <div className="card">
@@ -101,4 +133,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard; 
+export default Dashboard;

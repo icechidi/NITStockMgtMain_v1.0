@@ -1,0 +1,38 @@
+/* General Card Styles */
+.card {
+    border-radius: 8px;
+    color: white;
+    text-align: left;
+  }
+  
+  /* Total Items Box */
+  .total-items-box {
+    background-color: #add8e6; /* Baby blue */
+  }
+  
+  /* Low Stock Items Box */
+  .low-stock-box {
+    background-color: #177a3f; /* Calm green */
+  }
+  
+  /* Total Users Box */
+  .total-users-box {
+    background-color: #815600; /* Calm orange */
+  }
+  
+  /* Items for Repair Box */
+  .items-repair-box {
+    background-color: #811818; /* Calm red */
+  }
+  
+  /* Button Colors */
+  .btn-orange {
+    background-color: #ffa07a;
+    border-color: #ffa07a;
+    color: white;
+  }
+  
+  .btn-orange:hover {
+    background-color: #ff8c69;
+    border-color: #ff8c69;
+  }
