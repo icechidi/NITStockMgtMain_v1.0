@@ -3,6 +3,16 @@
   padding: 20px;
 }
 
+/* Main content background */
+.content {
+  background-color: #7f7d7d; /* Light gray */
+  padding: 20px;
+  min-height: 100vh; /* Ensure it covers the full viewport height */
+  box-sizing: border-box;
+  margin-top: 60px; /* Adjust for the fixed header height */
+
+}
+
 /* Table styles */
 .table {
   background-color: white;

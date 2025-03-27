@@ -1,0 +1,24 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #add8e6; /* Baby blue color */
+    color: #fff;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+  
+  .header-left h1 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  
+  .header-right .user-icon {
+    font-size: 1.8rem;
+    cursor: pointer;
+  }

@@ -1,6 +1,7 @@
 // Desc: Main App component
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
 import Navbar from './components/Navbar';
 import Dashboard from './components/Layout/Dashboard';
 import Users from './components/Users';
@@ -30,6 +31,7 @@ import './styles/dashboard.css';
 function App() {
   return (
     <Router>
+      <Header />
       <Navbar />
       <div className="content" style={{ marginLeft: '250px', padding: '20px' }}>
         <Routes>
