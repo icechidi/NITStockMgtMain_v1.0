@@ -43,13 +43,13 @@
   
   /* Close Button */
   .modal-content .btn-secondary {
-    background-color: #add8e6; /* Baby blue color */
+    background-color: #474848; /* Baby blue color */
     border-color: #add8e6;
     color: white;
     transition: background-color 0.3s ease;
   }
   
   .modal-content .btn-secondary:hover {
-    background-color: #87ceeb; /* Slightly darker baby blue on hover */
+    background-color: #2c5363; /* Slightly darker baby blue on hover */
     border-color: #87ceeb;
   }

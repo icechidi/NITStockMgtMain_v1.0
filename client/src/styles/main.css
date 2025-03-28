@@ -5,7 +5,7 @@
 
 /* Main content background */
 .content {
-  background-color: #7f7d7d; /* Light gray */
+  background-color: #a1a2a2; /* Light gray */
   padding: 20px;
   min-height: 100vh; /* Ensure it covers the full viewport height */
   box-sizing: border-box;
@@ -15,7 +15,8 @@
 
 /* Table styles */
 .table {
-  background-color: white;
+  background-color: rgb(101, 101, 101);
+  color: yellow;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
