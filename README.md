@@ -47,7 +47,7 @@ git clone https://github.com/icechidi/NITStockMgtMain_v1.0.git
 
 The application will be available at http://localhost:3000.
 
-Folder Structure
+Folder Structure...
 NITStockMgtMain_v1.0/
 ├── client/          # Frontend React application
 │   ├── public/      # Public assets
@@ -70,7 +70,7 @@ Contributing
 Contributions are welcome! Please fork the repository and submit a pull request.
 
 License
-This project is licensed under the MIT License.
+This project is licensed under the MIT License...
 
 Contact
 For any questions or support, please contact:
