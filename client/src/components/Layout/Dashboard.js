@@ -8,7 +8,8 @@ function Dashboard() {
     lowStockItems: 0,
     totalUsers: 1, // Example static value for Total Users
     itemsForRepair: 0, // Example static value for Items for Repair
-    recentMovements: []
+    recentMovements: [],
+    trackStock: [] // New state for Track Stock data
   });
   const [error, setError] = useState(null);
 
@@ -31,7 +32,8 @@ function Dashboard() {
         lowStockItems: Array.isArray(items) ? items.filter(item => item.quantity < 10).length : 0,
         totalUsers: 1, // Example static value
         itemsForRepair: Array.isArray(items) ? items.filter(item => item.needsRepair).length : 0,
-        recentMovements: Array.isArray(movements) ? movements.slice(0, 5) : []
+        recentMovements: Array.isArray(movements) ? movements.slice(0, 5) : [],
+        trackStock: Array.isArray(movements) ? movements.slice(0, 5) : [] // Fetch data for Track Stock
       });
     } catch (error) {
       console.error('Error fetching dashboard stats:', error);
@@ -103,7 +105,7 @@ function Dashboard() {
         <div className="col-12">
           <div className="card">
             <div className="card-body">
-              <h5 className="card-title">Recent Stock Movements</h5>
+              <h5 className="card-title" style={{ color: 'black' }}>Recent Stock Movements</h5>
               <table className="table">
                 <thead>
                   <tr>
@@ -120,6 +122,44 @@ function Dashboard() {
                       <td>{movement.item_name}</td>
                       <td>{movement.movement_type}</td>
                       <td>{movement.quantity}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <Link to="/stock-movements" className="btn btn-primary">View All Movements</Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Track Stock Table */}
+      <div className="row">
+        <div className="col-12">
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title" style={{ color: 'black' }}>Track Stock</h5>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Date/Time</th>
+                    <th>Item</th>
+                    <th>Type</th>
+                    <th>Quantity</th>
+                    <th>Note to be Edited</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array.isArray(stats.trackStock) && stats.trackStock.map(movement => (
+                    <tr key={movement.id}>
+                      <td>{formatDateTime(movement.movement_date)}</td>
+                      <td>{movement.item_name}</td>
+                      <td>{movement.movement_type}</td>
+                      <td>{movement.quantity}</td>
+                      <td>
+                        <Link to={`/stock-movements/${movement.id}/edit`} className="btn btn-warning btn-sm">
+                          Edit Note
+                        </Link>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

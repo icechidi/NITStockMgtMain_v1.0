@@ -36,3 +36,24 @@
     background-color: #ff8c69;
     border-color: #ff8c69;
   }
+
+  .table {
+    background-color: #f8f9fa; /* Light gray background */
+    border: 1px solid #dee2e6;
+    color: #333;
+  }
+  
+  .table th {
+    background-color: #e9ecef;
+    color: #495057;
+    font-weight: bold;
+  }
+  
+  .table td {
+    background-color: #f8f9fa;
+    color: #333;
+  }
+  
+  .table tr:hover {
+    background-color: #e2e6ea;
+  }
