@@ -12,6 +12,7 @@ function Dashboard() {
     trackStock: [] // New state for Track Stock data
   });
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
 
   useEffect(() => {
     fetchStats();
@@ -41,6 +42,17 @@ function Dashboard() {
     }
   };
 
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      // Redirect to a search results page or filter items dynamically
+      alert(`Searching for: ${searchQuery}`);
+      // Example: Redirect to a search results page
+      window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`;
+    } else {
+      alert('Please enter a search term.');
+    }
+  };
+
   const formatDateTime = (timestamp) => {
     if (!timestamp) return '';
     const date = new Date(timestamp);
@@ -53,7 +65,23 @@ function Dashboard() {
 
   return (
     <div className="dashboard">
-      <h2>Dashboard</h2>
+      <div className="header">
+        <h2 className="dashboard-title">Dashboard</h2>
+        <div className="search-bar">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search items..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button id="search-button" onClick={handleSearch}>
+            Search
+          </button>
+        </div>
+      </div>
+
+      {/* Dashboard content */}
       <div className="row">
         {/* Total Items Box */}
         <div className="col-md-3">
