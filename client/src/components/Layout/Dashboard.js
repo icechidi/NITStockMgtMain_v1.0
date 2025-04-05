@@ -8,6 +8,11 @@ function Dashboard() {
     lowStockItems: 0,
     totalUsers: 1, // Example static value for Total Users
     itemsForRepair: 0, // Example static value for Items for Repair
+    newAssets: 0,
+    newLicense: 0,
+    newAccessories: 0,
+    newConsumables: 0,
+    newTools: 0,
     recentMovements: [],
     trackStock: [] // New state for Track Stock data
   });
@@ -128,6 +133,7 @@ function Dashboard() {
         </div>
       </div>
 
+      
       {/* Recent Stock Movements */}
       <div className="row">
         <div className="col-12">
@@ -159,6 +165,54 @@ function Dashboard() {
           </div>
         </div>
       </div>
+
+
+      {/* Mini Boxes containing New Assets and New Accessories */}
+      {/* New Assets */}
+      <div className="row">
+      <div className="col-md-3">
+          <div className="card mb-4 total-items-box">
+            <div className="mini-box-content">
+              <h5 className="card-title"><i className=""></i> New Assets</h5>
+              <p className="card-text display-4">{stats.newAssets}</p>
+            </div>
+          </div>
+        </div>
+
+            {/* New Accessories */}
+            <div className="col-md-3">
+          <div className="card mb-4 low-stock-box">
+            <div className="mini-box-content">
+              <h5 className="card-title"><i className=""></i> New Accessories</h5>
+              <p className="card-text display-4">{stats.newAccessories}</p>
+            </div>
+          </div>
+        </div>
+
+
+        <div className="col-md-3">
+          <div className="card mb-4 total-items-box">
+            <div className="mini-box-content">
+              <h5 className="card-title"><i className=""></i> New Assets</h5>
+              <p className="card-text display-4">{stats.newAssets}</p>
+            </div>
+          </div>
+        </div>
+
+            {/* New Accessories */}
+            <div className="col-md-3">
+          <div className="card mb-4 low-stock-box">
+            <div className="mini-box-content">
+              <h5 className="card-title"><i className=""></i> New Accessories</h5>
+              <p className="card-text display-4">{stats.newAccessories}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* end of rows */}
+        </div>
+
+
 
       {/* Track Stock Table */}
       <div className="row">

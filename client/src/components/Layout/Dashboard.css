@@ -4,7 +4,21 @@
     color: white;
     text-align: left;
   }
-  
+
+  /* Mini boxes contents */
+.mini-box-content {
+    padding-top: 10px;
+    font-size: 1.2rem;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Mini boxes titles */
+.mini-box-content h5 {
+    font-size: 1.2rem;
+  }
+
   /* Total Items Box */
   .total-items-box {
     background-color: #056385; /* Baby blue */
