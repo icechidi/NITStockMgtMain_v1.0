@@ -8,7 +8,11 @@ function Navbar() {
       <h2 className="sidebar-title">NITStockMgt</h2>
       <ul className="nav flex-column">
         <li className="nav-item"><Link className="nav-link" to="/dashboard">Dashboard</Link></li>
-        <li className="nav-item"><Link className="nav-link" to="/users">Users</Link></li>
+        <li className="nav-item"><Link className="nav-link" to="/dashboard">Users</Link></li>
+        <li className="nav-item"><Link className="nav-link" to="/items">Items</Link></li>
+        <li className="nav-item">
+          <Link className="nav-link" to="/stock-movements">Stock Movements</Link></li>
+          
         <li className="nav-item"><Link className="nav-link" to="/groups">Groups</Link></li>
         <li className="nav-item"><Link className="nav-link" to="/brands">Brands</Link></li>
         <li className="nav-item"><Link className="nav-link" to="/category">Category</Link></li>

@@ -35,7 +35,7 @@ function App() {
       <Navbar />
       <div className="content" style={{ marginLeft: '250px', padding: '20px' }}>
         <Routes>
-            <Route path="/" element={<Dashboard />} />
+          <Route path="/" element={<Dashboard />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/users" element={<Users />} />
           <Route path="/groups" element={<Groups />} />
