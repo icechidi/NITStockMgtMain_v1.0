@@ -1,10 +1,10 @@
 // Desc: Main App component
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/Header';
+import Header from './components/Header/Header';
 import Navbar from './components/Navbar/Navbar';
 import Dashboard from './components/Layout/Dashboard';
-import Users from './components/Users';
+import Users from './components/Users/Users';
 import Groups from './components/Groups';
 import Brands from './components/Brands/Brands';
 import Category from './components/Category/Category';
