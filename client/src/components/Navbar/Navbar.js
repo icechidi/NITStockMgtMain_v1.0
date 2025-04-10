@@ -1,16 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css'; // Add a custom CSS file for styling
-import { FaUserCircle } from 'react-icons/fa'; // Example user login icon
+//import { FaUserCircle } from 'react-icons/fa'; // Example user login icon
+import { FaUserAlt } from 'react-icons/fa'; // Import a better user icon
 
 function Navbar() {
   return (
     <div className="navbar">
       
+      
       <ul className="nav flex-column">
-      <div className="user-icon" style={{ textAlign: 'center', marginBottom: '10px' }}>
+      {/* <div className="user-icon" style={{ textAlign: 'center', marginBottom: '10px' }}>
         <FaUserCircle size={40} />
         <p style={{ fontSize: '12px', marginTop: '5px' }}>Admin</p>
+      </div> */}
+
+      <div className="user-icon">
+        <FaUserAlt size={30} color="#ffffff" /> {/* Better user icon */}
+        <p className="user-name">User</p> {/* Optional user label */}
       </div>
 
         <li className="nav-item"><Link className="nav-link" to="/dashboard">Dashboard</Link></li>
