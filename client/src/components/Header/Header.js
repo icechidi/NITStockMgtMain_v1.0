@@ -5,7 +5,7 @@ function Header() {
   return (
     <header className="header">
       <div className="header-left">
-        <h1>Admin</h1>
+        <h1>NITStockMgt</h1>
       </div>
       <div className="header-right">
         <i className="user-icon fas fa-user-circle"></i>
