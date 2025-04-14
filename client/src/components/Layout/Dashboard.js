@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Dashboard.css'; // Import the new CSS file
 
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+
+// Register Chart.js components
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
+
 function Dashboard() {
   const [stats, setStats] = useState({
     totalItems: 0,
@@ -67,6 +74,35 @@ function Dashboard() {
   if (error) {
     return <div className="alert alert-danger">{error}</div>;
   }
+
+
+  // Example data for the chart
+  const data = {
+    labels: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'], // Replace with your item names
+    datasets: [
+      {
+        label: 'Stock Quantity',
+        data: [50, 30, 70, 40, 90], // Replace with your stock quantities
+        backgroundColor: 'rgba(54, 162, 235, 0.6)', // Bar color
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Stock Levels by Item',
+      },
+    },
+  };
+//end of chart
 
   return (
     <div className="dashboard">
@@ -251,7 +287,21 @@ function Dashboard() {
           </div>
         </div>
       </div>
+
+  {/* New Chart Section */}
+  <div className="stock-chart" style={{ marginTop: '20px' }}>
+      <h2>Stock Overview</h2>
+      <Bar data={data} options={options} />
     </div>
+    {/* End of Chart Section */}
+
+    </div>
+
+    
+    
+
+
+
   );
 }
 
