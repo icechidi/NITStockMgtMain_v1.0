@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Dashboard.css'; // Import the new CSS file
 
-import { Bar } from 'react-chartjs-2';
+import { Chart } from 'react-google-charts'; // Import Google Charts
+
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
 // Register Chart.js components
@@ -76,33 +77,31 @@ function Dashboard() {
   }
 
 
-  // Example data for the chart
-  const data = {
-    labels: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'], // Replace with your item names
-    datasets: [
-      {
-        label: 'Stock Quantity',
-        data: [50, 30, 70, 40, 90], // Replace with your stock quantities
-        backgroundColor: 'rgba(54, 162, 235, 0.6)', // Bar color
-        borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 1,
-      },
-    ],
-  };
+ // Sankey chart data
+  const sankeyData = [
+    ['From', 'To', 'Quantity'], // Header row
+    ['Warehouse', 'Store A', 50],
+    ['Warehouse', 'Store B', 30],
+    ['Store A', 'Customer 1', 20],
+    ['Store A', 'Customer 2', 30],
+    ['Store B', 'Customer 3', 30],
+  ];
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top',
+  const sankeyOptions = {
+    width: '100%',
+    height: 400,
+    sankey: {
+      node: {
+        label: { fontSize: 14 },
       },
-      title: {
-        display: true,
-        text: 'Stock Levels by Item',
+      link: {
+        colorMode: 'gradient',
       },
     },
   };
-//end of chart
+  //end of chart
+
+
 
   return (
     <div className="dashboard">
@@ -288,12 +287,18 @@ function Dashboard() {
         </div>
       </div>
 
-  {/* New Chart Section */}
-  <div className="stock-chart" style={{ marginTop: '20px' }}>
-      <h2>Stock Overview</h2>
-      <Bar data={data} options={options} />
-    </div>
-    {/* End of Chart Section */}
+
+    {/* Sankey Chart Section */}
+    <div className="stock-chart" style={{ marginTop: '20px' }}>
+        <h2>Stock Flow Overview</h2>
+        <Chart
+          chartType="Sankey"
+          width="100%"
+          height="400px"
+          data={sankeyData}
+          options={sankeyOptions}
+        />
+      </div>
 
     </div>
 
