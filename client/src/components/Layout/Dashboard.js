@@ -99,7 +99,26 @@ function Dashboard() {
       },
     },
   };
-  //end of chart
+
+
+  // Line chart data
+  const lineChartData = [
+    ['Date', 'Stock In', 'Stock Out'], // Header row
+    ['2025-04-01', 100, 50],
+    ['2025-04-02', 120, 60],
+    ['2025-04-03', 150, 80],
+    ['2025-04-04', 170, 90],
+    ['2025-04-05', 200, 100],
+  ];
+
+  const lineChartOptions = {
+    title: 'Stock In vs Stock Out Over Time',
+    curveType: 'function',
+    legend: { position: 'bottom' },
+    width: '100%',
+    height: 400,
+  };
+  //end of both charts
 
 
 
@@ -288,18 +307,33 @@ function Dashboard() {
       </div>
 
 
-    {/* Sankey Chart Section */}
-    <div className="stock-chart" style={{ marginTop: '20px' }}>
-        <h2>Stock Flow Overview</h2>
-        <Chart
-          chartType="Sankey"
-          width="100%"
-          height="400px"
-          data={sankeyData}
-          options={sankeyOptions}
-        />
+    {/* Sankey and Line Chart Section */}
+    <div className="row" style={{ marginTop: '20px' }}>
+        <div className="col-md-6">
+          <div className="stock-chart">
+            <h2>Stock Flow Overview</h2>
+            <Chart
+              chartType="Sankey"
+              width="100%"
+              height="400px"
+              data={sankeyData}
+              options={sankeyOptions}
+            />
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="stock-chart">
+            <h2>Stock Trends</h2>
+            <Chart
+              chartType="LineChart"
+              width="100%"
+              height="400px"
+              data={lineChartData}
+              options={lineChartOptions}
+            />
+          </div>
+        </div>
       </div>
-
     </div>
 
     
