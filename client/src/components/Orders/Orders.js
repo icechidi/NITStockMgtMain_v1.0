@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './Orders.css'; // Add a custom CSS file for styling
 
 function NewOrder() {
   const [items, setItems] = useState([]); // List of available items
