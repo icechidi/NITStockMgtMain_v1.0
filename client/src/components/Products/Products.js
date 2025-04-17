@@ -89,6 +89,21 @@ function Products() {
           ))}
         </div>
       </section>
+
+      {/* Categories Section */}
+      <section className="categories-section">
+        <h2>Categories</h2>
+        <div className="categories-grid">
+          {categories.map((category, index) => (
+            <div key={index} className="category-card">
+              <div className="category-icon">📦</div> {/* Placeholder icon */}
+              <p>{category}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+
     </div>
   );
 }
