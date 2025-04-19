@@ -11,6 +11,20 @@ function NewOrder() {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
+    // Static categories for orders
+    const [orderCategories] = useState([
+      'Electronics Orders',
+      'Furniture Orders',
+      'Clothing Orders',
+      'Books Orders',
+      'Toys Orders',
+      'Groceries Orders',
+      'Sports Orders',
+      'Beauty Orders',
+      'Automotive Orders',
+      'Stationery Orders',
+    ]);
+
   // Fetch available items from the API
   useEffect(() => {
     const fetchItems = async () => {
@@ -100,6 +114,20 @@ function NewOrder() {
 
       {successMessage && <div className="alert alert-success">{successMessage}</div>}
       {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+
+      {/* Order Categories Section */}
+      <section className="order-categories-section">
+        <h3>Order Categories</h3>
+        <div className="categories-grid">
+          {orderCategories.map((category, index) => (
+            <div key={index} className="category-card">
+              <div className="category-icon">📦</div> {/* Placeholder icon */}
+              <p>{category}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
 
       <form onSubmit={handleSubmit}>
         {/* Customer Details */}
