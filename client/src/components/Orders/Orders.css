@@ -1,3 +1,30 @@
+/* Order Categories Section */
+.order-categories-section {
+  margin-bottom: 40px;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.category-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.category-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+/* Order Categories Section */
+
+
 .new-order {
     max-width: 600px;
     margin: 0 auto;
