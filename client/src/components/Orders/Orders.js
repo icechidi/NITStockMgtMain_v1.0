@@ -10,6 +10,9 @@ function NewOrder() {
   });
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [submittedOrder, setSubmittedOrder] = useState(null); // Store the submitted order
+
+  
 
     // Static categories for orders
     const [orderCategories] = useState([
@@ -211,7 +214,40 @@ function NewOrder() {
           Place Order
         </button>
       </form>
+
+      {/* Rounded-Edge Table */}
+      {submittedOrder && (
+        <div className="order-summary">
+          <h3>Order Summary</h3>
+          <table className="table rounded-table">
+            <thead>
+              <tr>
+                <th>Customer Name</th>
+                <th>Customer Email</th>
+                <th>Item</th>
+                <th>Quantity</th>
+              </tr>
+            </thead>
+            <tbody>
+              {submittedOrder.orderItems.map((item, index) => {
+                const product = items.find((i) => i.id === item.itemId);
+                return (
+                  <tr key={index}>
+                    <td>{submittedOrder.customerName}</td>
+                    <td>{submittedOrder.customerEmail}</td>
+                    <td>{product ? product.name : 'Unknown Item'}</td>
+                    <td>{item.quantity}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+
     </div>
+
+
   );
 }
 
