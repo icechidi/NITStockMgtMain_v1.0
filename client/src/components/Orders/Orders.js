@@ -201,6 +201,7 @@ function NewOrder() {
               onClick={() => removeOrderItem(index)}
             >
               Remove Item
+              
             </button>
           </div>
         ))}
