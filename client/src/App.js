@@ -3,6 +3,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Navbar from './components/Navbar/Navbar';
+import Login from './components/Login/Login';
+
 import Dashboard from './components/Layout/Dashboard';
 import Users from './components/Users/Users';
 import Groups from './components/Groups/Groups';
@@ -35,6 +37,8 @@ function App() {
       <Navbar />
       <div className="content" style={{ marginLeft: '250px', padding: '20px' }}>
         <Routes>
+
+          <Route path="/" element={<Login />} />
           <Route path="/" element={<Dashboard />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/users" element={<Users />} />

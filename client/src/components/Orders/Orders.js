@@ -94,9 +94,11 @@ function NewOrder() {
         },
         body: JSON.stringify(order),
       });
-
+  
       if (response.ok) {
+        const savedOrder = await response.json(); // Assuming the API returns the saved order
         setSuccessMessage('Order placed successfully!');
+        setSubmittedOrder(savedOrder); // Use setSubmittedOrder to store the submitted order
         setOrder({
           customerName: '',
           customerEmail: '',
@@ -110,6 +112,8 @@ function NewOrder() {
       setErrorMessage('An error occurred. Please try again.');
     }
   };
+
+  
 
   return (
     <div className="new-order">
