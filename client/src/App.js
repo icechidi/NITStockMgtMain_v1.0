@@ -18,9 +18,8 @@ import Orders from './components/Orders/Orders';
 import Reports from './components/Reports';
 import Company from './components/Companys/Company';
 import Profile from './components/Profile';
-import Settings from './components/Settings';
-import Logout from './components/Logout';
 
+import Logout from './components/Logout';
 import ItemList from './components/Items/ItemList';
 import ItemForm from './components/Items/ItemForm';
 import ItemDetail from './components/Items/ItemDetail';
@@ -53,7 +52,6 @@ function App() {
           <Route path="/reports" element={<Reports />} />
           <Route path="/company" element={<Company />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/settings" element={<Settings />} />
           <Route path="/items" element={<ItemList />} />
             <Route path="/items/new" element={<ItemForm />} />
             <Route path="/items/:id" element={<ItemDetail />} />
