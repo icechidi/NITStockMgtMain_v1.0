@@ -53,6 +53,8 @@ function App() {
           <Route path="/company" element={<Company />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/items" element={<ItemList />} />
+
+          <Route path="/stores" element={<Stores />} />
             <Route path="/items/new" element={<ItemForm />} />
             <Route path="/items/:id" element={<ItemDetail />} />
             <Route path="/items/:id/edit" element={<ItemForm />} />
