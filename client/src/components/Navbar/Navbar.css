@@ -5,12 +5,26 @@
     top: 0;
     left: 0;
     background-color: #15191b; /* Light background */
+    height: 100vh;
+    padding: 20px;
     padding: 60px 0px 0px 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     overflow-y: hidden; /* Hide scrollbar by default */
     transition: overflow-y 0.3s ease; /* Smooth transition for scrollbar visibility */
   }
   
+
+  
+.user-icon {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.user-name {
+  font-size: 14px;
+  margin-top: 5px;
+  color: #ffffff;
+}
 
   .navbar:hover {
     overflow-y: auto; /* Show scrollbar on hover */
@@ -76,6 +90,8 @@
   }
   
   .nav-link {
+    display: flex;
+    align-items: center;
     text-decoration: none;
     color: #dedede;
     font-size: 1rem;
@@ -97,3 +113,10 @@
   .nav-link.text-danger:hover {
     background-color: #f8d7da;
   }
+
+  
+.nav-icon {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
