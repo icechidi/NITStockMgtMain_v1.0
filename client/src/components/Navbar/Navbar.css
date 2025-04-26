@@ -5,19 +5,25 @@
     top: 0;
     left: 0;
     background-color: #15191b; /* Light background */
-    height: 100vh;
-    padding: 20px;
-    padding: 60px 0px 0px 20px;
+    padding: 60px 0 0 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     overflow-y: hidden; /* Hide scrollbar by default */
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
     transition: overflow-y 0.3s ease; /* Smooth transition for scrollbar visibility */
-  }
+}
   
 
   
-.user-icon {
-  text-align: center;
-  margin-bottom: 20px;
+  .user-icon-admin {
+    text-align: center;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column; /* Stack icon and name vertically */
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
+    width: 100%; /* Take full width of the navbar */
 }
 
 .user-name {
@@ -25,6 +31,19 @@
   margin-top: 5px;
   color: #ffffff;
 }
+
+/* Navbar content styling */
+.nav {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px; /* Add spacing below the user icon */
+  width: 100%; /* Ensure the nav takes full width */
+}
+
+.nav-item {
+  margin-bottom: 0px;
+}
+
 
   .navbar:hover {
     overflow-y: auto; /* Show scrollbar on hover */
