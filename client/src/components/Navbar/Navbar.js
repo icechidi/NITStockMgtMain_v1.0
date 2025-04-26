@@ -6,12 +6,12 @@ import { FaHome, FaBox, FaExchangeAlt, FaUsers, FaTags, FaThList, FaStore, FaWar
 function Navbar() {
   return (
     <div className="navbar">
-      <div className="user-icon">
+      <ul className="nav flex-column">
+      <div className="user-icon-admin">
         <FaUserCircle size={40} color="#ffffff" /> {/* User icon */}
         <p className="user-name">Admin</p> {/* Optional user label */}
       </div>
 
-      <ul className="nav flex-column">
         <li className="nav-item">
           <Link className="nav-link" to="/dashboard">
             <FaHome className="nav-icon" /> Dashboard
@@ -80,11 +80,6 @@ function Navbar() {
         <li className="nav-item">
           <Link className="nav-link" to="/profile">
             <FaUserCircle className="nav-icon" /> Profile
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/settings">
-            <FaCogs className="nav-icon" /> Settings
           </Link>
         </li>
         <li className="nav-item">

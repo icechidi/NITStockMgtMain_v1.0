@@ -5,7 +5,7 @@
     top: 0;
     left: 0;
     background-color: #15191b; /* Light background */
-    padding: 60px 0 0 20px;
+    padding: 3.5% 0 0 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     overflow-y: hidden; /* Hide scrollbar by default */
     display: flex; /* Use flexbox for layout */
@@ -14,23 +14,21 @@
     transition: overflow-y 0.3s ease; /* Smooth transition for scrollbar visibility */
 }
   
-
-  
   .user-icon-admin {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
     display: flex;
     flex-direction: column; /* Stack icon and name vertically */
     align-items: center; /* Center horizontally */
-    justify-content: center; /* Center vertically */
     width: 100%; /* Take full width of the navbar */
 }
 
 .user-name {
-  font-size: 14px;
-  margin-top: 5px;
-  color: #ffffff;
+  font-size: 1.5rem; /* Increase the font size of the username */
+  color: #ffffff; /* White text color */
+  font-weight: bold; /* Make the text bold */
 }
+
 
 /* Navbar content styling */
 .nav {
@@ -44,9 +42,59 @@
   margin-bottom: 0px;
 }
 
+.nav-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #dedede;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  width: 100%; /* Ensure links take full width */
+}
 
-  .navbar:hover {
-    overflow-y: auto; /* Show scrollbar on hover */
+.nav-icon {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+  /* User icon styling */
+  .navbar .user-icon-admin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 0px;
+    margin-left: -50px; /* Move the icon slightly to the left */
+  }
+
+
+  .user-icon-admin svg {
+    font-size: 80px; /* Increase the size of the user icon */
+    color: #ffffff; /* White color for the icon */
+    margin-right: 0px; /* Add spacing between the icon and the text */
+}
+  .navbar .user-icon-admin .user-name {
+    color: #ffffff; /* White text color */
+    font-size: 0.9rem; /* Smaller font size */
+    margin-top: 5px; /* Small spacing below the icon */
+}
+
+  .nav-link.text-danger {
+    color: #dc3545;
+  }
+  
+  .nav-link.text-danger:hover {
+    background-color: #f8d7da;
+  }
+
+.nav-link:hover {
+  background-color: #212121;
+  color: #007bff;
+}
+
+.navbar:hover {
+  overflow-y: auto; /* Show scrollbar on hover */
 }
 
 /* Custom scrollbar styling */
@@ -65,77 +113,5 @@
 
 .navbar::-webkit-scrollbar-track {
     background-color: #15191b; /* Scrollbar track color */
-}
-
-
-/* Navbar title styling */
-  /*Empty at the moment cause there's no title above navbar*/
-  .navbar-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-  }
-  /*Empty at the moment cause there's no title above navbar*/
-
-  /* User icon styling */
-  .navbar .user-icon {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 10px;
-    margin-left: -30px; /* Move the icon slightly to the left */
-  }
-
-  .navbar .user-icon svg {
-    font-size: 80px; /* Increase the size of the user icon */
-    color: #ffffff; /* White color for the icon */
-}
-
-  .navbar .user-icon .user-name {
-    color: #ffffff; /* White text color */
-    font-size: 0.9rem; /* Smaller font size */
-    margin-top: 5px; /* Small spacing below the icon */
-}
-
-  /* User icon styling */
-  .nav {
-    list-style: none;
-    padding: 0;
-  }
-    
-  
-  .nav-item {
-    margin-bottom: 0.5rem, 0;
-  }
-  
-  .nav-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: #dedede;
-    font-size: 1rem;
-    display: block;
-    padding: 0.5rem;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .nav-link:hover {
-    background-color: #212121;
-    color: #007bff;
-  }
-  
-  .nav-link.text-danger {
-    color: #dc3545;
-  }
-  
-  .nav-link.text-danger:hover {
-    background-color: #f8d7da;
-  }
-
-  
-.nav-icon {
-  margin-right: 10px;
-  font-size: 18px;
 }
 

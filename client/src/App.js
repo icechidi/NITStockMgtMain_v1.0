@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Navbar from './components/Navbar/Navbar';
 import Login from './components/Login/Login';
-import Dashboard from './components/Layout/Dashboard';
+import Dashboard from './components/Dashboard/Dashboard';
 import Groups from './components/Groups/Groups';
 import Brands from './components/Brands/Brands';
 import Category from './components/Category/Category';
