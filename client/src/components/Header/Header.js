@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Header.css'; // Import the CSS for the header
 
 function Header() {
-
-  
+  const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState(''); // State for search query
+
+  const handleBrandClick = () => {
+    navigate('/dashboard'); // Redirect to the dashboard
+  };
 
   useEffect(() => {
     fetchStats();
@@ -15,7 +19,6 @@ function Header() {
     try {
       // Fetch items
       // Fetch recent movements
-
     } catch (error) {
       console.error('Error fetching dashboard stats:', error);
       setError('Error loading dashboard data');
@@ -33,17 +36,16 @@ function Header() {
     }
   };
 
-  
-
   if (error) {
     return <div className="alert alert-danger">{error}</div>;
   }
 
 
   return (
-    <header className="header">
-      <div className="header-left">
+    <header className="header-navbar">
+      <div className="header-brand" onClick={handleBrandClick}>
         <h1>NITStockMgt</h1>
+        
       </div>
 
       <div className="search-bar">

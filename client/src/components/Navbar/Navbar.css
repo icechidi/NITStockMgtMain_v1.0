@@ -5,7 +5,7 @@
     top: 0;
     left: 0;
     background-color: #15191b; /* Light background */
-    padding: 3.5% 0 0 20px;
+    padding: 50px 0 0 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     overflow-y: hidden; /* Hide scrollbar by default */
     display: flex; /* Use flexbox for layout */

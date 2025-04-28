@@ -1,24 +1,42 @@
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #135970; /* Baby blue color */
-    color: #fff;
-    padding: 10px 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
+.header-navbar {
+  position: fixed; /* Fix the navbar at the top */
+  top: 0;
+  left: 0;
+  width: 100%; /* Full width */
+  height: 60px; /* Adjust height as needed */
+  background-color: #15191b; /* Background color */
+  color: #ffffff; /* Text color */
+  display: flex; /* Use flexbox for layout */
+  align-items: center; /* Center items vertically */
+  justify-content: space-between; /* Space between items */
+  padding: 0 20px; /* Add padding for spacing */
+  z-index: 1000; /* Ensure it stays above other content */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add shadow for separation */
+  overflow: hidden; /* Prevent scrollbars */
   }
   
-  .header-left h1 {
+  .header-navbar h1 {
     margin: 0;
     font-size: 1.5rem;
   }
-  
-  .header-right .user-icon {
-    font-size: 1.8rem;
-    cursor: pointer;
-  }
+
+  /* Make "NITStockMgt" clickable */
+.header-navbar .header-brand {
+  font-size: 1.5rem; /* Keep the size as it is */
+  font-weight: bold;
+  color: #ffffff; /* White text color */
+  text-decoration: none; /* Remove underline */
+  cursor: pointer; /* Show pointer on hover */
+}
+
+.header-navbar .header-brand:hover {
+  color: #007bff; /* Change color on hover */
+}
+
+/* Page Content */
+.page-content {
+  margin-top: 60px; /* Add margin to account for the fixed header */
+  overflow-y: auto; /* Enable scrolling for the page content */
+  height: calc(100vh - 60px); /* Adjust height to exclude the header */
+  padding: 20px; /* Add padding for spacing */
+}
