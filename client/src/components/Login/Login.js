@@ -1,49 +1,49 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-//import './Login.css'; // Add custom CSS for styling
+"use client"
+
+import { useState, useContext } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { AuthContext } from "../../context/AuthContext"
+import "./Login.css"
 
 function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const navigate = useNavigate();
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [errorMessage, setErrorMessage] = useState("")
+  const { login } = useContext(AuthContext)
+  const navigate = useNavigate()
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-
-    // Validate password standards
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    if (!passwordRegex.test(password)) {
-      setErrorMessage(
-        'Password must be at least 8 characters long and include at least one letter, one number, and one special character.'
-      );
-      return;
-    }
+    e.preventDefault()
 
     try {
-      const response = await fetch('http://localhost:5000/api/login', {
-        method: 'POST',
+      // For demo purposes, we'll simulate a successful login
+      // In a real app, you would validate with your backend
+      login({ username, role: "admin" })
+      navigate("/dashboard")
+
+      /* Uncomment this for real backend integration
+      const response = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password }),
-      });
+      })
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (response.ok) {
-        // Save user info to localStorage or sessionStorage
-        localStorage.setItem('user', JSON.stringify(data.user));
-        // Redirect to the dashboard
-        navigate('/dashboard');
+        login(data.user)
+        navigate("/dashboard")
       } else {
-        setErrorMessage(data.message || 'Invalid username or password.');
+        setErrorMessage(data.message || "Invalid username or password.")
       }
+      */
     } catch (error) {
-      console.error('Error during login:', error);
-      setErrorMessage('An error occurred. Please try again.');
+      console.error("Error during login:", error)
+      setErrorMessage("An error occurred. Please try again.")
     }
-  };
+  }
 
   return (
     <div className="login-container">
@@ -77,9 +77,12 @@ function Login() {
         <button type="submit" className="btn btn-primary">
           Login
         </button>
+        <p className="mt-3 text-center">
+          Don't have an account? <Link to="/register">Register</Link>
+        </p>
       </form>
     </div>
-  );
+  )
 }
 
-export default Login;
+export default Login
