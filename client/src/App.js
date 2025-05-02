@@ -21,6 +21,7 @@ import ItemForm from './components/Items/ItemForm';
 import ItemDetail from './components/Items/ItemDetail';
 import StockMovementList from './components/StockMovements/StockMovementList';
 import StockMovementForm from './components/StockMovements/StockMovementForm';
+import Requests from "./components/Requests/Requests"
 
 import './styles/main.css';
 import './styles/dashboard.css';
@@ -53,6 +54,12 @@ function App() {
           <Route path="/items/:id/edit" element={<ItemForm />} />
           <Route path="/stock-movements" element={<StockMovementList />} />
           <Route path="/stock-movements/new" element={<StockMovementForm />} />
+          <Route
+            path="/requests"
+            element={
+                <Requests />
+            }
+          />
         </Routes>
       </div>
     </Router>

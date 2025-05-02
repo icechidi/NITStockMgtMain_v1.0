@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css'; // Add a custom CSS file for styling
-import { FaHome, FaBox, FaExchangeAlt, FaUsers, FaTags, FaThList, FaStore, FaWarehouse, FaCogs, FaClipboardList, FaChartBar, FaBuilding, FaUserCircle, FaSignOutAlt } from 'react-icons/fa'; // Import icons
+import { FaHome, FaBox, FaExchangeAlt, FaClipboard, FaUsers, FaTags, FaThList, FaStore, FaWarehouse, FaCogs, FaClipboardList, FaChartBar, FaBuilding, FaUserCircle, FaSignOutAlt } from 'react-icons/fa'; // Import icons
 
 function Navbar() {
   return (
@@ -65,6 +65,11 @@ function Navbar() {
         <li className="nav-item">
           <Link className="nav-link" to="/orders">
             <FaChartBar className="nav-icon" /> Orders
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link" to="/requests">
+            <FaClipboard className="nav-icon" /> Requests
           </Link>
         </li>
         <li className="nav-item">
