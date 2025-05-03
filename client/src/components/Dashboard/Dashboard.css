@@ -257,6 +257,37 @@
   .quick-actions {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .chart-container {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 10px;
+  }
+
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .chart-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .data-table {
+    min-width: 500px; /* Ensure tables can be scrolled horizontally */
+  }
+
+  .data-table-wrapper {
+    overflow-x: auto;
+    margin: 0 -10px;
+    padding: 0 10px;
+  }
 }
 
 @media (max-width: 576px) {
@@ -266,5 +297,33 @@
 
   .quick-actions {
     grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    height: 80px; /* Slightly smaller on very small screens */
+  }
+
+  .stat-card-value {
+    font-size: 1.3rem;
+  }
+
+  .stat-card-title {
+    font-size: 0.8rem;
+  }
+}
+
+/* Add touch-friendly styles for mobile */
+@media (hover: none) {
+  .stat-card-link {
+    opacity: 1; /* Always show links on touch devices */
+  }
+
+  .action-card {
+    padding: 20px 15px; /* Larger touch target */
+  }
+
+  .data-table td,
+  .data-table th {
+    padding: 15px; /* Larger touch targets for table cells */
   }
 }

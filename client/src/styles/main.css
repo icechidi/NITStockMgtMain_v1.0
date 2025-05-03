@@ -10,7 +10,6 @@
   min-height: 100vh; /* Ensure it covers the full viewport height */
   box-sizing: border-box;
   margin-top: 50px; /* Adjust for the fixed header height */
-
 }
 
 /* Table styles */
@@ -49,12 +48,84 @@
 }
 
 /* Responsive adjustments */
+@media (max-width: 992px) {
+  .content {
+    margin-left: 250px; /* Adjust for sidebar width */
+  }
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 10px;
   }
-  
-  .display-4 {
-    font-size: 2rem;
+
+  .content {
+    margin-top: 60px; /* Adjust for mobile header height */
+    margin-left: 0; /* Full width on mobile */
+    padding: 15px;
   }
-} 
+
+  .display-4 {
+    font-size: 1.8rem;
+  }
+
+  /* Adjust table display for small screens */
+  .table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* Make buttons stack on small screens */
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .btn-group .btn {
+    margin-right: 0;
+    margin-bottom: 5px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    padding: 5px;
+  }
+
+  .content {
+    padding: 10px;
+  }
+
+  .card {
+    margin-bottom: 15px;
+  }
+
+  /* Adjust form elements for better mobile experience */
+  .form-control {
+    font-size: 16px; /* Prevents iOS zoom on focus */
+  }
+
+  /* Improve touch targets */
+  .btn {
+    padding: 10px 15px;
+    margin-bottom: 5px;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) {
+  /* Increase touch targets */
+  .btn,
+  .form-control,
+  .nav-link,
+  select.form-control {
+    min-height: 44px; /* Apple's recommended minimum touch target size */
+  }
+
+  /* Disable hover effects that might cause issues on touch devices */
+  .table tbody tr:hover {
+    background-color: inherit;
+  }
+}
