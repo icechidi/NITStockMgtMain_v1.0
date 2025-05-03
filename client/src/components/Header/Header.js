@@ -1,69 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './Header.css'; // Import the CSS for the header
+"use client"
+
+import { useContext } from "react"
+import { useLocation } from "react-router-dom"
+import { AuthContext } from "../../context/AuthContext"
+import "./Header.css"
 
 function Header() {
-  const navigate = useNavigate();
-  const [error, setError] = useState(null);
-  const [searchQuery, setSearchQuery] = useState(''); // State for search query
+  const { currentUser } = useContext(AuthContext)
+  const location = useLocation()
 
-  const handleBrandClick = () => {
-    navigate('/dashboard'); // Redirect to the dashboard
-  };
-
-  useEffect(() => {
-    fetchStats();
-  }, []);
-
-  const fetchStats = async () => {
-    try {
-      // Fetch items
-      // Fetch recent movements
-    } catch (error) {
-      console.error('Error fetching dashboard stats:', error);
-      setError('Error loading dashboard data');
-    }
-  };
-
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      // Redirect to a search results page or filter items dynamically
-      alert(`Searching for: ${searchQuery}`);
-      // Example: Redirect to a search results page
-      window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`;
-    } else {
-      alert('Please enter a search term.');
-    }
-  };
-
-  if (error) {
-    return <div className="alert alert-danger">{error}</div>;
+  // Don't show header on login or register pages
+  if (location.pathname === "/login" || location.pathname === "/register") {
+    return null
   }
 
-
   return (
-    <header className="header-navbar">
-      <div className="header-brand" onClick={handleBrandClick}>
-        <h1>NITStockMgt</h1>
-        
-      </div>
+    <header className="header">
+      <h1 className="header-title">Stock Management System</h1>
 
-      <div className="search-bar">
-          <input
-            type="text"
-            id="search-input"
-            placeholder="Search items..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button id="search-button" onClick={handleSearch}>
-            Search
-          </button>
+      {currentUser && (
+        <div className="header-actions">
+          <div className="header-user">
+            <span className="header-user-name">Welcome, {currentUser.username}</span>
+          </div>
         </div>
-
-      
+      )}
     </header>
-  );
+  )
 }
 
-export default Header;
+export default Header
