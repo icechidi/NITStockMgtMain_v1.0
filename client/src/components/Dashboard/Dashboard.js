@@ -70,10 +70,10 @@ function Dashboard() {
   }
 
   if (error) {
-    return <div className="alert alert-danger">{error}</div>
+    return <div className="dashboard-error-alert">{error}</div>
   }
 
-  // Line chart data
+  // Line chart data - Using simple strings instead of Date objects to avoid the "Do" error
   const stockTrendData = [
     ["Date", "Stock In", "Stock Out"],
     ["Mon", 45, 22],
@@ -96,157 +96,157 @@ function Dashboard() {
   ]
 
   return (
-    <div className="dashboard">
+    <div className="dashboard-container">
       {/* Stats Cards - First Row */}
-      <div className="stats-cards">
-        <div className="stat-card blue-card">
-          <div className="stat-card-icon">
+      <div className="dashboard-stats-cards">
+        <div className="dashboard-stat-card dashboard-blue-card">
+          <div className="dashboard-stat-card-icon">
             <FaBox />
           </div>
-          <div className="stat-card-content">
-            <p className="stat-card-title">Total Items</p>
-            <h3 className="stat-card-value">{stats.totalItems}</h3>
+          <div className="dashboard-stat-card-content">
+            <p className="dashboard-stat-card-title">Total Items</p>
+            <h3 className="dashboard-stat-card-value">{stats.totalItems}</h3>
           </div>
-          <Link to="/items" className="stat-card-link">
+          <Link to="/items" className="dashboard-stat-card-link">
             View All →
           </Link>
         </div>
 
-        <div className="stat-card orange-card">
-          <div className="stat-card-icon">
+        <div className="dashboard-stat-card dashboard-orange-card">
+          <div className="dashboard-stat-card-icon">
             <FaExclamationTriangle />
           </div>
-          <div className="stat-card-content">
-            <p className="stat-card-title">Low Stock Items</p>
-            <h3 className="stat-card-value">{stats.lowStockItems}</h3>
+          <div className="dashboard-stat-card-content">
+            <p className="dashboard-stat-card-title">Low Stock Items</p>
+            <h3 className="dashboard-stat-card-value">{stats.lowStockItems}</h3>
           </div>
-          <Link to="/items" className="stat-card-link">
+          <Link to="/items" className="dashboard-stat-card-link">
             Check Now →
           </Link>
         </div>
 
-        <div className="stat-card green-card">
-          <div className="stat-card-icon">
+        <div className="dashboard-stat-card dashboard-green-card">
+          <div className="dashboard-stat-card-icon">
             <FaUsers />
           </div>
-          <div className="stat-card-content">
-            <p className="stat-card-title">Total Users</p>
-            <h3 className="stat-card-value">{stats.totalUsers}</h3>
+          <div className="dashboard-stat-card-content">
+            <p className="dashboard-stat-card-title">Total Users</p>
+            <h3 className="dashboard-stat-card-value">{stats.totalUsers}</h3>
           </div>
-          <Link to="/users" className="stat-card-link">
+          <Link to="/users" className="dashboard-stat-card-link">
             Manage →
           </Link>
         </div>
 
-        <div className="stat-card red-card">
-          <div className="stat-card-icon">
+        <div className="dashboard-stat-card dashboard-red-card">
+          <div className="dashboard-stat-card-icon">
             <FaTools />
           </div>
-          <div className="stat-card-content">
-            <p className="stat-card-title">Items for Repair</p>
-            <h3 className="stat-card-value">{stats.itemsForRepair}</h3>
+          <div className="dashboard-stat-card-content">
+            <p className="dashboard-stat-card-title">Items for Repair</p>
+            <h3 className="dashboard-stat-card-value">{stats.itemsForRepair}</h3>
           </div>
-          <Link to="/repairs" className="stat-card-link">
+          <Link to="/repairs" className="dashboard-stat-card-link">
             View →
           </Link>
         </div>
       </div>
 
       {/* Stats Cards - Second Row */}
-      <div className="stats-cards">
-        <div className="stat-card purple-card">
-          <div className="stat-card-icon">
+      <div className="dashboard-stats-cards">
+        <div className="dashboard-stat-card dashboard-purple-card">
+          <div className="dashboard-stat-card-icon">
             <FaLaptop />
           </div>
-          <div className="stat-card-content">
-            <p className="stat-card-title">New Assets</p>
-            <h3 className="stat-card-value">{stats.newAssets}</h3>
+          <div className="dashboard-stat-card-content">
+            <p className="dashboard-stat-card-title">New Assets</p>
+            <h3 className="dashboard-stat-card-value">{stats.newAssets}</h3>
           </div>
-          <Link to="/assets" className="stat-card-link">
+          <Link to="/assets" className="dashboard-stat-card-link">
             Details →
           </Link>
         </div>
 
-        <div className="stat-card teal-card">
-          <div className="stat-card-icon">
+        <div className="dashboard-stat-card dashboard-teal-card">
+          <div className="dashboard-stat-card-icon">
             <FaFileContract />
           </div>
-          <div className="stat-card-content">
-            <p className="stat-card-title">New Licenses</p>
-            <h3 className="stat-card-value">{stats.newLicense}</h3>
+          <div className="dashboard-stat-card-content">
+            <p className="dashboard-stat-card-title">New Licenses</p>
+            <h3 className="dashboard-stat-card-value">{stats.newLicense}</h3>
           </div>
-          <Link to="/licenses" className="stat-card-link">
+          <Link to="/licenses" className="dashboard-stat-card-link">
             View All →
           </Link>
         </div>
 
-        <div className="stat-card indigo-card">
-          <div className="stat-card-icon">
+        <div className="dashboard-stat-card dashboard-indigo-card">
+          <div className="dashboard-stat-card-icon">
             <FaShoppingCart />
           </div>
-          <div className="stat-card-content">
-            <p className="stat-card-title">Pending Orders</p>
-            <h3 className="stat-card-value">{stats.pendingOrders}</h3>
+          <div className="dashboard-stat-card-content">
+            <p className="dashboard-stat-card-title">Pending Orders</p>
+            <h3 className="dashboard-stat-card-value">{stats.pendingOrders}</h3>
           </div>
-          <Link to="/orders" className="stat-card-link">
+          <Link to="/orders" className="dashboard-stat-card-link">
             Process →
           </Link>
         </div>
 
-        <div className="stat-card pink-card">
-          <div className="stat-card-icon">
+        <div className="dashboard-stat-card dashboard-pink-card">
+          <div className="dashboard-stat-card-icon">
             <FaTruck />
           </div>
-          <div className="stat-card-content">
-            <p className="stat-card-title">Pending Shipments</p>
-            <h3 className="stat-card-value">{stats.pendingShipments}</h3>
+          <div className="dashboard-stat-card-content">
+            <p className="dashboard-stat-card-title">Pending Shipments</p>
+            <h3 className="dashboard-stat-card-value">{stats.pendingShipments}</h3>
           </div>
-          <Link to="/shipments" className="stat-card-link">
+          <Link to="/shipments" className="dashboard-stat-card-link">
             Track →
           </Link>
         </div>
       </div>
 
       {/* Quick Actions */}
-      <div className="quick-actions">
-        <Link to="/items/new" className="action-card">
-          <div className="action-icon text-primary">
+      <div className="dashboard-quick-actions">
+        <Link to="/items/new" className="dashboard-action-card">
+          <div className="dashboard-action-icon text-primary">
             <FaPlusCircle />
           </div>
-          <p className="action-title">Add New Item</p>
+          <p className="dashboard-action-title">Add New Item</p>
         </Link>
 
-        <Link to="/stock-movements/new" className="action-card">
-          <div className="action-icon text-success">
+        <Link to="/stock-movements/new" className="dashboard-action-card">
+          <div className="dashboard-action-icon text-success">
             <FaExchangeAlt />
           </div>
-          <p className="action-title">Record Movement</p>
+          <p className="dashboard-action-title">Record Movement</p>
         </Link>
 
-        <Link to="/reports" className="action-card">
-          <div className="action-icon text-warning">
+        <Link to="/reports" className="dashboard-action-card">
+          <div className="dashboard-action-icon text-warning">
             <FaFileAlt />
           </div>
-          <p className="action-title">Generate Report</p>
+          <p className="dashboard-action-title">Generate Report</p>
         </Link>
 
-        <Link to="/items" className="action-card">
-          <div className="action-icon text-info">
+        <Link to="/items" className="dashboard-action-card">
+          <div className="dashboard-action-icon text-info">
             <FaSearch />
           </div>
-          <p className="action-title">Search Inventory</p>
+          <p className="dashboard-action-title">Search Inventory</p>
         </Link>
       </div>
 
       {/* Charts Row */}
-      <div className="row">
-        <div className="col-md-8">
-          <div className="chart-container">
-            <div className="chart-header">
-              <h5 className="chart-title">Stock Movement Trends</h5>
-              <div className="chart-actions">
+      <div className="dashboard-row">
+        <div className="dashboard-col-md-8">
+          <div className="dashboard-chart-container">
+            <div className="dashboard-chart-header">
+              <h5 className="dashboard-chart-title">Stock Movement Trends</h5>
+              <div className="dashboard-chart-actions">
                 <select
-                  className="form-select form-select-sm"
+                  className="dashboard-form-select"
                   value={timeframe}
                   onChange={(e) => setTimeframe(e.target.value)}
                 >
@@ -277,10 +277,10 @@ function Dashboard() {
             />
           </div>
         </div>
-        <div className="col-md-4">
-          <div className="chart-container">
-            <div className="chart-header">
-              <h5 className="chart-title">Category Distribution</h5>
+        <div className="dashboard-col-md-4">
+          <div className="dashboard-chart-container">
+            <div className="dashboard-chart-header">
+              <h5 className="dashboard-chart-title">Category Distribution</h5>
             </div>
             <Chart
               chartType="PieChart"
@@ -304,15 +304,15 @@ function Dashboard() {
       </div>
 
       {/* Recent Stock Movements */}
-      <div className="chart-container">
-        <div className="chart-header">
-          <h5 className="chart-title">Recent Stock Movements</h5>
-          <Link to="/stock-movements" className="btn btn-sm btn-outline-primary">
+      <div className="dashboard-chart-container">
+        <div className="dashboard-chart-header">
+          <h5 className="dashboard-chart-title">Recent Stock Movements</h5>
+          <Link to="/stock-movements" className="dashboard-btn dashboard-btn-sm dashboard-btn-outline-primary">
             View All
           </Link>
         </div>
-        <div className="table-responsive">
-          <table className="data-table">
+        <div className="dashboard-table-responsive">
+          <table className="dashboard-data-table">
             <thead>
               <tr>
                 <th>Date/Time</th>
@@ -329,13 +329,18 @@ function Dashboard() {
                     <td>{formatDateTime(movement.movement_date)}</td>
                     <td>{movement.item_name}</td>
                     <td>
-                      <span className={`status-badge ${movement.movement_type === "IN" ? "status-in" : "status-out"}`}>
+                      <span
+                        className={`dashboard-status-badge ${movement.movement_type === "IN" ? "dashboard-status-in" : "dashboard-status-out"}`}
+                      >
                         {movement.movement_type}
                       </span>
                     </td>
                     <td>{movement.quantity}</td>
                     <td>
-                      <Link to={`/stock-movements/${movement.id}`} className="btn btn-sm btn-outline-secondary">
+                      <Link
+                        to={`/stock-movements/${movement.id}`}
+                        className="dashboard-btn dashboard-btn-sm dashboard-btn-outline-secondary"
+                      >
                         Details
                       </Link>
                     </td>
@@ -343,7 +348,7 @@ function Dashboard() {
                 ))}
               {(!Array.isArray(stats.recentMovements) || stats.recentMovements.length === 0) && (
                 <tr>
-                  <td colSpan="5" className="text-center">
+                  <td colSpan="5" className="dashboard-text-center">
                     No recent movements found
                   </td>
                 </tr>
@@ -354,15 +359,15 @@ function Dashboard() {
       </div>
 
       {/* Low Stock Alert */}
-      <div className="chart-container">
-        <div className="chart-header">
-          <h5 className="chart-title">Low Stock Alerts</h5>
-          <Link to="/items" className="btn btn-sm btn-outline-danger">
+      <div className="dashboard-chart-container">
+        <div className="dashboard-chart-header">
+          <h5 className="dashboard-chart-title">Low Stock Alerts</h5>
+          <Link to="/items" className="dashboard-btn dashboard-btn-sm dashboard-btn-outline-danger">
             Manage Inventory
           </Link>
         </div>
-        <div className="table-responsive">
-          <table className="data-table">
+        <div className="dashboard-table-responsive">
+          <table className="dashboard-data-table">
             <thead>
               <tr>
                 <th>Item Name</th>
@@ -378,10 +383,13 @@ function Dashboard() {
                 <td>5</td>
                 <td>10</td>
                 <td>
-                  <span className="status-badge status-out">Critical</span>
+                  <span className="dashboard-status-badge dashboard-status-out">Critical</span>
                 </td>
                 <td>
-                  <Link to="/stock-movements/new" className="btn btn-sm btn-outline-primary">
+                  <Link
+                    to="/stock-movements/new"
+                    className="dashboard-btn dashboard-btn-sm dashboard-btn-outline-primary"
+                  >
                     Restock
                   </Link>
                 </td>
@@ -391,10 +399,13 @@ function Dashboard() {
                 <td>8</td>
                 <td>15</td>
                 <td>
-                  <span className="status-badge status-pending">Low</span>
+                  <span className="dashboard-status-badge dashboard-status-pending">Low</span>
                 </td>
                 <td>
-                  <Link to="/stock-movements/new" className="btn btn-sm btn-outline-primary">
+                  <Link
+                    to="/stock-movements/new"
+                    className="dashboard-btn dashboard-btn-sm dashboard-btn-outline-primary"
+                  >
                     Restock
                   </Link>
                 </td>
@@ -404,10 +415,13 @@ function Dashboard() {
                 <td>12</td>
                 <td>20</td>
                 <td>
-                  <span className="status-badge status-pending">Low</span>
+                  <span className="dashboard-status-badge dashboard-status-pending">Low</span>
                 </td>
                 <td>
-                  <Link to="/stock-movements/new" className="btn btn-sm btn-outline-primary">
+                  <Link
+                    to="/stock-movements/new"
+                    className="dashboard-btn dashboard-btn-sm dashboard-btn-outline-primary"
+                  >
                     Restock
                   </Link>
                 </td>
