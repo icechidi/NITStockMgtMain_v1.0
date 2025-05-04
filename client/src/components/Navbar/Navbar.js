@@ -1,100 +1,157 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './Navbar.css'; // Add a custom CSS file for styling
-import { FaHome, FaBox, FaExchangeAlt, FaClipboard, FaUsers, FaTags, FaThList, FaStore, FaWarehouse, FaCogs, FaClipboardList, FaChartBar, FaBuilding, FaUserCircle, FaSignOutAlt } from 'react-icons/fa'; // Import icons
+"use client"
+
+import { useState, useEffect, useContext } from "react"
+import { Link, useLocation } from "react-router-dom"
+import {
+  FaUser,
+  FaTachometerAlt,
+  FaBoxes,
+  FaExchangeAlt,
+  FaStore,
+  FaLayerGroup,
+  FaChartBar,
+  FaSignOutAlt,
+  FaUserCog,
+  FaBuilding,
+  FaTags,
+  FaBoxOpen,
+  FaShoppingCart,
+  FaClipboardList,
+} from "react-icons/fa"
+import { AuthContext } from "../../context/AuthContext"
+import "./Navbar.css"
 
 function Navbar() {
-  return (
-    <div className="navbar">
-      <ul className="nav flex-column">
-      <div className="user-icon-admin">
-        <FaUserCircle size={40} color="#ffffff" /> {/* User icon */}
-        <p className="user-name">Admin</p> {/* Optional user label */}
-      </div>
+  const location = useLocation()
+  const { currentUser, logout } = useContext(AuthContext)
+  const [mobileOpen, setMobileOpen] = useState(false)
 
-        <li className="nav-item">
-          <Link className="nav-link" to="/dashboard">
-            <FaHome className="nav-icon" /> Dashboard
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/items">
-            <FaBox className="nav-icon" /> Items
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/stock-movements">
-            <FaExchangeAlt className="nav-icon" /> Stock Movements
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/groups">
-            <FaUsers className="nav-icon" /> Groups
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/brands">
-            <FaTags className="nav-icon" /> Brands
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/category">
-            <FaThList className="nav-icon" /> Category
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/stores">
-            <FaStore className="nav-icon" /> Stores
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/stocks">
-            <FaWarehouse className="nav-icon" /> Stocks
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/attributes">
-            <FaCogs className="nav-icon" /> Attributes
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/products">
-            <FaClipboardList className="nav-icon" /> Products
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/orders">
-            <FaChartBar className="nav-icon" /> Orders
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/requests">
-            <FaClipboard className="nav-icon" /> Requests
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/reports">
-            <FaChartBar className="nav-icon" /> Reports
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/company">
-            <FaBuilding className="nav-icon" /> Company
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/profile">
-            <FaUserCircle className="nav-icon" /> Profile
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link text-danger" to="/logout">
-            <FaSignOutAlt className="nav-icon" /> Logout
-          </Link>
-        </li>
-      </ul>
-    </div>
-  );
+  // Close navbar when route changes on mobile
+  useEffect(() => {
+    setMobileOpen(false)
+  }, [location])
+
+  // Close navbar when clicking outside on mobile
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (mobileOpen && !event.target.closest(".navbar-container") && !event.target.closest(".navbar-toggle")) {
+        setMobileOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [mobileOpen])
+
+  // Prevent body scroll when navbar is open on mobile
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
+    }
+
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [mobileOpen])
+
+  return (
+    <>
+      {/* Mobile Toggle Button */}
+      <button className="navbar-toggle d-md-none" onClick={() => setMobileOpen(true)} aria-label="Open menu">
+        <FaBoxes />
+      </button>
+
+      {/* Mobile Overlay */}
+      <div className={`navbar-overlay ${mobileOpen ? "active" : ""}`}></div>
+
+      <div className={`navbar-container ${mobileOpen ? "mobile-open" : ""}`}>
+        {/* Mobile Close Button */}
+        <button className="navbar-close d-md-none" onClick={() => setMobileOpen(false)} aria-label="Close menu">
+          &times;
+        </button>
+
+        <div className="navbar-user-icon-admin">
+          <FaUser />
+          <div className="navbar-user-name">{currentUser?.username || "User"}</div>
+        </div>
+
+        <ul className="navbar-nav">
+          <li className="navbar-nav-item">
+            <Link to="/dashboard" className={`navbar-nav-link ${location.pathname === "/dashboard" ? "active" : ""}`}>
+              <FaTachometerAlt className="navbar-nav-icon" /> Dashboard
+            </Link>
+          </li>
+          <li className="navbar-nav-item">
+            <Link to="/products" className={`navbar-nav-link ${location.pathname === "/products" ? "active" : ""}`}>
+              <FaBoxes className="navbar-nav-icon" /> Products
+            </Link>
+          </li>
+          <li className="navbar-nav-item">
+            <Link to="/orders" className={`navbar-nav-link ${location.pathname === "/orders" ? "active" : ""}`}>
+              <FaShoppingCart className="navbar-nav-icon" /> Orders
+            </Link>
+          </li>
+          <li className="navbar-nav-item">
+            <Link to="/requests" className={`navbar-nav-link ${location.pathname === "/requests" ? "active" : ""}`}>
+              <FaClipboardList className="navbar-nav-icon" /> Requests
+            </Link>
+          </li>
+          <li className="navbar-nav-item">
+            <Link
+              to="/stock-movements"
+              className={`navbar-nav-link ${location.pathname === "/stock-movements" ? "active" : ""}`}
+            >
+              <FaExchangeAlt className="navbar-nav-icon" /> Stock Movements
+            </Link>
+          </li>
+          <li className="navbar-nav-item">
+            <Link to="/stores" className={`navbar-nav-link ${location.pathname === "/stores" ? "active" : ""}`}>
+              <FaStore className="navbar-nav-icon" /> Stores
+            </Link>
+          </li>
+          <li className="navbar-nav-item">
+            <Link to="/groups" className={`navbar-nav-link ${location.pathname === "/groups" ? "active" : ""}`}>
+              <FaLayerGroup className="navbar-nav-icon" /> Groups
+            </Link>
+          </li>
+          <li className="navbar-nav-item">
+            <Link to="/brands" className={`navbar-nav-link ${location.pathname === "/brands" ? "active" : ""}`}>
+              <FaTags className="navbar-nav-icon" /> Brands
+            </Link>
+          </li>
+          <li className="navbar-nav-item">
+            <Link to="/stocks" className={`navbar-nav-link ${location.pathname === "/stocks" ? "active" : ""}`}>
+              <FaBoxOpen className="navbar-nav-icon" /> Stocks
+            </Link>
+          </li>
+          <li className="navbar-nav-item">
+            <Link to="/reports" className={`navbar-nav-link ${location.pathname === "/reports" ? "active" : ""}`}>
+              <FaChartBar className="navbar-nav-icon" /> Reports
+            </Link>
+          </li>
+          <li className="navbar-nav-item">
+            <Link to="/company" className={`navbar-nav-link ${location.pathname === "/company" ? "active" : ""}`}>
+              <FaBuilding className="navbar-nav-icon" /> Company
+            </Link>
+          </li>
+          <li className="navbar-nav-item">
+            <Link to="/profile" className={`navbar-nav-link ${location.pathname === "/profile" ? "active" : ""}`}>
+              <FaUserCog className="navbar-nav-icon" /> Profile
+            </Link>
+          </li>
+          <li className="navbar-nav-item">
+            <Link to="/login" className="navbar-nav-link text-danger" onClick={logout}>
+              <FaSignOutAlt className="navbar-nav-icon" /> Logout
+            </Link>
+          </li>
+        </ul>
+      </div>
+    </>
+  )
 }
 
-export default Navbar;
+export default Navbar

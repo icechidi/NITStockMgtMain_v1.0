@@ -22,18 +22,18 @@
   color: #333;
 }
 
-.form-group {
+.login-form-group {
   margin-bottom: 20px;
 }
 
-.form-group label {
+.login-form-group label {
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
   color: #555;
 }
 
-.form-control {
+.login-form-control {
   width: 100%;
   padding: 10px 12px;
   font-size: 16px;
@@ -42,13 +42,13 @@
   transition: border-color 0.2s;
 }
 
-.form-control:focus {
+.login-form-control:focus {
   border-color: #4a90e2;
   outline: none;
   box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
 }
 
-.btn {
+.login-btn {
   display: block;
   width: 100%;
   padding: 12px;
@@ -61,16 +61,16 @@
   transition: background-color 0.2s;
 }
 
-.btn-primary {
+.login-btn-primary {
   background-color: #4a90e2;
   color: white;
 }
 
-.btn-primary:hover {
+.login-btn-primary:hover {
   background-color: #3a80d2;
 }
 
-.alert {
+.login-alert {
   padding: 12px;
   margin-bottom: 20px;
   border-radius: 4px;
@@ -79,16 +79,16 @@
   border: 1px solid #f5c6cb;
 }
 
-.mt-3 {
+.login-mt-3 {
   margin-top: 16px;
 }
 
-.text-center {
+.login-text-center {
   text-align: center;
 }
 
 /* Loading spinner */
-.loading-container {
+.login-loading-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -96,17 +96,17 @@
   height: 100vh;
 }
 
-.loading-spinner {
+.login-loading-spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
   border-radius: 50%;
   border-top: 4px solid #4a90e2;
   width: 40px;
   height: 40px;
-  animation: spin 1s linear infinite;
+  animation: login-spin 1s linear infinite;
   margin-bottom: 16px;
 }
 
-@keyframes spin {
+@keyframes login-spin {
   0% {
     transform: rotate(0deg);
   }
