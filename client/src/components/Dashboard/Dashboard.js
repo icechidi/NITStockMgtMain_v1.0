@@ -73,9 +73,9 @@ function Dashboard() {
     return <div className="dashboard-error-alert">{error}</div>
   }
 
-  // Line chart data - Using simple strings instead of Date objects to avoid the "Do" error
+  // Line chart data - Using simple strings instead of Date objects
   const stockTrendData = [
-    ["Date", "Stock In", "Stock Out"],
+    ["Day", "Stock In", "Stock Out"],
     ["Mon", 45, 22],
     ["Tue", 38, 25],
     ["Wed", 55, 30],
@@ -257,15 +257,21 @@ function Dashboard() {
               </div>
             </div>
             <Chart
-              chartType="LineChart"
+              chartType="ColumnChart" // Changed from LineChart to ColumnChart
               width="100%"
               height="300px"
               data={stockTrendData}
               options={{
-                curveType: "function",
+                title: "",
                 legend: { position: "bottom" },
-                hAxis: { textStyle: { color: "#6c757d" } },
-                vAxis: { textStyle: { color: "#6c757d" } },
+                hAxis: {
+                  title: "Day",
+                  textStyle: { color: "#6c757d" },
+                },
+                vAxis: {
+                  title: "Quantity",
+                  textStyle: { color: "#6c757d" },
+                },
                 colors: ["#0d6efd", "#dc3545"],
                 chartArea: { width: "80%", height: "70%" },
                 animation: {
@@ -273,6 +279,8 @@ function Dashboard() {
                   duration: 1000,
                   easing: "out",
                 },
+                isStacked: false,
+                bar: { groupWidth: "70%" },
               }}
             />
           </div>

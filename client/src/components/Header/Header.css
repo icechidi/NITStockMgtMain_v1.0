@@ -1,5 +1,5 @@
 .header-container {
-  background-color: white;
+  background-color: #34495e; /* Slightly lighter than navbar's #2c3e50 */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 15px 20px;
   display: flex;
@@ -7,12 +7,13 @@
   align-items: center;
   position: relative;
   z-index: 100;
+  color: white; /* Text color to ensure readability */
 }
 
 .header-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #2c3e50;
+  color: #ecf0f1; /* Light color for better contrast */
   margin: 0;
 }
 
@@ -30,11 +31,12 @@
 .header-user-name {
   margin-right: 10px;
   font-weight: 500;
+  color: #ecf0f1; /* Light color for better contrast */
 }
 
 .header-icon {
   font-size: 1.2rem;
-  color: #555;
+  color: #ecf0f1; /* Light color for better contrast */
   margin-left: 15px;
   cursor: pointer;
 }
