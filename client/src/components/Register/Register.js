@@ -11,6 +11,7 @@ function Register() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
   const { register, currentUser } = useContext(AuthContext)
   const navigate = useNavigate()
 
@@ -24,10 +25,12 @@ function Register() {
   const handleRegister = async (e) => {
     e.preventDefault()
     setErrorMessage("")
+    setIsLoading(true)
 
     // Basic validation
     if (!username.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
       setErrorMessage("All fields are required")
+      setIsLoading(false)
       return
     }
 
@@ -35,47 +38,37 @@ function Register() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
       setErrorMessage("Please enter a valid email address.")
+      setIsLoading(false)
       return
     }
 
-    // Validate password standards - simplified for demo
+    // Validate password standards
     if (password.length < 6) {
       setErrorMessage("Password must be at least 6 characters long.")
+      setIsLoading(false)
       return
     }
 
     // Check if passwords match
     if (password !== confirmPassword) {
       setErrorMessage("Passwords do not match.")
+      setIsLoading(false)
       return
     }
 
     try {
-      // For demo purposes, we'll simulate a successful registration
-      register({ username, email, role: "admin" })
-      navigate("/dashboard")
+      const result = await register({ username, email, password })
 
-      /* Uncomment this for real backend integration
-      const response = await fetch("http://localhost:5000/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, email, password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        register({ username, email, role: data.role || "user" });
-        navigate("/dashboard");
+      if (result.success) {
+        navigate("/dashboard")
       } else {
-        setErrorMessage(data.message || "Registration failed. Please try again.");
+        setErrorMessage(result.message || "Registration failed. Please try again.")
       }
-      */
     } catch (error) {
       console.error("Error during registration:", error)
       setErrorMessage("An error occurred. Please try again.")
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -95,6 +88,7 @@ function Register() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
+              disabled={isLoading}
             />
           </div>
           <div className="form-group">
@@ -107,6 +101,7 @@ function Register() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={isLoading}
             />
           </div>
           <div className="form-group">
@@ -119,6 +114,7 @@ function Register() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={isLoading}
             />
           </div>
           <div className="form-group">
@@ -131,10 +127,11 @@ function Register() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
+              disabled={isLoading}
             />
           </div>
-          <button type="submit" className="btn btn-primary">
-            Register
+          <button type="submit" className="btn btn-primary" disabled={isLoading}>
+            {isLoading ? "Registering..." : "Register"}
           </button>
           <p className="mt-3 text-center">
             Already have an account? <Link to="/login">Login</Link>

@@ -6,43 +6,133 @@ import { useNavigate } from "react-router-dom"
 // Create the auth context
 export const AuthContext = createContext()
 
+// API URL
+const API_URL = "http://localhost:5000/api"
+
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [token, setToken] = useState(localStorage.getItem("token") || null)
   const navigate = useNavigate()
 
   // Check for existing user session on component mount
   useEffect(() => {
-    try {
-      const storedUser = localStorage.getItem("user")
-      if (storedUser) {
-        setCurrentUser(JSON.parse(storedUser))
+    const checkAuth = async () => {
+      try {
+        const storedToken = localStorage.getItem("token")
+        const storedUser = localStorage.getItem("user")
+
+        if (storedToken && storedUser) {
+          setToken(storedToken)
+          setCurrentUser(JSON.parse(storedUser))
+        }
+      } catch (error) {
+        console.error("Error checking authentication:", error)
+        localStorage.removeItem("token")
+        localStorage.removeItem("user")
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error("Error parsing stored user:", error)
-      localStorage.removeItem("user") // Clear invalid data
-    } finally {
-      setLoading(false)
     }
+
+    checkAuth()
   }, [])
 
   // Login function
-  const login = (userData) => {
-    setCurrentUser(userData)
-    localStorage.setItem("user", JSON.stringify(userData))
+  const login = async (credentials) => {
+    try {
+      console.log("Attempting login with:", credentials)
+
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credentials),
+      })
+
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type")
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await response.text()
+        console.error("Non-JSON response:", text)
+        return {
+          success: false,
+          message: "Server returned an invalid response. Please check if the server is running correctly.",
+        }
+      }
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || "Login failed")
+      }
+
+      // Save token and user data
+      localStorage.setItem("token", data.token)
+      localStorage.setItem("user", JSON.stringify(data.user))
+
+      setToken(data.token)
+      setCurrentUser(data.user)
+
+      return { success: true }
+    } catch (error) {
+      console.error("Login error:", error)
+      return { success: false, message: error.message || "Login failed. Please try again." }
+    }
   }
 
   // Logout function
   const logout = () => {
     setCurrentUser(null)
+    setToken(null)
+    localStorage.removeItem("token")
     localStorage.removeItem("user")
     navigate("/login")
   }
 
   // Register function
-  const register = (userData) => {
-    setCurrentUser(userData)
-    localStorage.setItem("user", JSON.stringify(userData))
+  const register = async (userData) => {
+    try {
+      console.log("Attempting registration with:", { ...userData, password: "[REDACTED]" })
+
+      const response = await fetch(`${API_URL}/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      })
+
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type")
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await response.text()
+        console.error("Non-JSON response:", text)
+        return {
+          success: false,
+          message: "Server returned an invalid response. Please check if the server is running correctly.",
+        }
+      }
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || "Registration failed")
+      }
+
+      // Save token and user data
+      localStorage.setItem("token", data.token)
+      localStorage.setItem("user", JSON.stringify(data.user))
+
+      setToken(data.token)
+      setCurrentUser(data.user)
+
+      return { success: true }
+    } catch (error) {
+      console.error("Registration error:", error)
+      return { success: false, message: error.message || "Registration failed. Please try again." }
+    }
   }
 
   // Provide the auth context to children components
@@ -54,6 +144,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         register,
         loading,
+        token,
         isAuthenticated: !!currentUser,
       }}
     >
