@@ -41,14 +41,20 @@ export const AuthProvider = ({ children }) => {
   // Login function
   const login = async (credentials) => {
     try {
-      console.log("Attempting login with:", credentials)
+      console.log("Login credentials:", { ...credentials, password: "[REDACTED]" })
+
+      // Make sure we're sending the correct format
+      const loginData = {
+        username: credentials.username,
+        password: credentials.password,
+      }
 
       const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(credentials),
+        body: JSON.stringify(loginData),
       })
 
       // Check if response is JSON
@@ -94,7 +100,7 @@ export const AuthProvider = ({ children }) => {
   // Register function
   const register = async (userData) => {
     try {
-      console.log("Attempting registration with:", { ...userData, password: "[REDACTED]" })
+      console.log("Registration data:", { ...userData, password: "[REDACTED]" })
 
       const response = await fetch(`${API_URL}/auth/register`, {
         method: "POST",

@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
-const User = require('../models/User'); // Assuming you have a User model
+const User = require('../../../../server/models/User'); // Assuming you have a User model
 
 // Secret key for JWT
 const JWT_SECRET = 'your_jwt_secret_key';
@@ -33,11 +33,17 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Registration endpoint (optional)
+// Registration endpoint
 router.post('/register', async (req, res) => {
   const { username, password } = req.body;
 
+  console.log('Request Body:', req.body); // Debug log
+
   try {
+    if (!username || !password) {
+      return res.status(400).json({ message: 'Username and password are required.' });
+    }
+
     // Check if user already exists
     const existingUser = await User.findOne({ username });
     if (existingUser) {

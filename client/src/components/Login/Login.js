@@ -33,6 +33,9 @@ function Login() {
     }
 
     try {
+      // Log what we're sending to the login function
+      console.log("Sending login credentials:", { username, passwordLength: password.length })
+
       const result = await login({ username, password })
 
       if (result.success) {
