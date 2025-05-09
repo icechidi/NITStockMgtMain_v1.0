@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Link } from "react-router-dom"
 import "./Dashboard.css"
 import { Chart } from "react-google-charts"
@@ -17,12 +17,16 @@ import {
   FaExchangeAlt,
   FaFileAlt,
   FaSearch,
+  
 } from "react-icons/fa"
 
 function Dashboard() {
+  const [items, setItems] = useState([])
+  const [movements, setMovements] = useState([])
+  const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState({
     totalItems: 0,
-    lowStockItems: 0,
+    lowStockItems: 0, // This is the only instance of lowStockItems now
     totalUsers: 1,
     itemsForRepair: 0,
     newAssets: 5,
@@ -30,37 +34,159 @@ function Dashboard() {
     pendingOrders: 7,
     pendingShipments: 4,
     recentMovements: [],
-    trackStock: [],
+    stockTrendData: [],
+    lowStockItemsList: [], // Changed from lowStockItems to lowStockItemsList
   })
   const [error, setError] = useState(null)
   const [timeframe, setTimeframe] = useState("week")
 
-  useEffect(() => {
-    fetchStats()
-  })
-
-  const fetchStats = async () => {
-    try {
-      // Fetch items
-      const itemsResponse = await fetch("http://localhost:5000/api/items")
-      const items = await itemsResponse.json()
-
-      // Fetch recent movements
-      const movementsResponse = await fetch("http://localhost:5000/api/stock-movements")
-      const movements = await movementsResponse.json()
-
-      setStats({
-        ...stats,
-        totalItems: Array.isArray(items) ? items.length : 0,
-        lowStockItems: Array.isArray(items) ? items.filter((item) => item.quantity < 10).length : 0,
-        itemsForRepair: Array.isArray(items) ? items.filter((item) => item.needsRepair).length : 0,
-        recentMovements: Array.isArray(movements) ? movements.slice(0, 5) : [],
-        trackStock: Array.isArray(movements) ? movements.slice(0, 5) : [],
-      })
-    } catch (error) {
-      console.error("Error fetching dashboard stats:", error)
-      setError("Error loading dashboard data")
+  // Process stock movement data into trend data for the chart
+  const processStockTrendData = useCallback((movements, timeframe) => {
+    if (!Array.isArray(movements) || movements.length === 0) {
+      setStats((prevStats) => ({ ...prevStats, stockTrendData: getDefaultStockTrendData() }))
+      return
     }
+
+    // Sort movements by date
+    const sortedMovements = [...movements].sort((a, b) => new Date(a.movement_date) - new Date(b.movement_date))
+
+    // Filter movements based on timeframe
+    const filteredMovements = filterMovementsByTimeframe(sortedMovements, timeframe)
+
+    // Group movements by date and type
+    const groupedData = groupMovementsByDateAndType(filteredMovements)
+
+    // Format data for Google Charts
+    const chartData = formatDataForChart(groupedData)
+    setStats((prevStats) => ({ ...prevStats, stockTrendData: chartData }))
+  }) // Empty dependency array since this doesn't depend on any external variables
+
+  // Use useCallback to memoize the fetch functions
+  const fetchItems = useCallback(async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/items")
+      const data = await response.json()
+      setItems(Array.isArray(data) ? data : [])
+    } catch (err) {
+      console.error("Error fetching items:", err)
+      setError("Failed to load items data")
+    }
+  }, [])
+
+  const fetchMovements = useCallback(async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/stock-movements")
+      const data = await response.json()
+      setMovements(Array.isArray(data) ? data : [])
+    } catch (err) {
+      console.error("Error fetching movements:", err)
+      setError("Failed to load movement data")
+    }
+  }, [])
+
+  useEffect(() => {
+    setLoading(true)
+    Promise.all([fetchItems(), fetchMovements()])
+      .then(() => {
+        // Process data after fetching
+        processFetchedData()
+      })
+      .finally(() => setLoading(false))
+
+    // No dependencies here - we only want to fetch once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    processStockTrendData(movements, timeframe)
+  }, [movements, timeframe, processStockTrendData]) // Added processStockTrendData to dependency array
+
+  const processFetchedData = () => {
+    // Get low stock items
+    const lowStockItems = Array.isArray(items) ? items.filter((item) => item.quantity < 10) : []
+
+    setStats((prevStats) => ({
+      ...prevStats,
+      totalItems: Array.isArray(items) ? items.length : 0,
+      lowStockItems: lowStockItems.length,
+      itemsForRepair: Array.isArray(items) ? items.filter((item) => item.needsRepair).length : 0,
+      recentMovements: Array.isArray(movements) ? movements.slice(0, 5) : [],
+      lowStockItemsList: lowStockItems.slice(0, 3), // Get top 3 low stock items
+    }))
+  }
+
+  // Filter movements based on selected timeframe
+  const filterMovementsByTimeframe = (movements, timeframe) => {
+    const now = new Date()
+    const cutoffDate = new Date()
+
+    switch (timeframe) {
+      case "week":
+        cutoffDate.setDate(now.getDate() - 7)
+        break
+      case "month":
+        cutoffDate.setMonth(now.getMonth() - 1)
+        break
+      case "quarter":
+        cutoffDate.setMonth(now.getMonth() - 3)
+        break
+      default:
+        cutoffDate.setDate(now.getDate() - 7)
+    }
+
+    return movements.filter((movement) => new Date(movement.movement_date) >= cutoffDate)
+  }
+
+  // Group movements by date and movement type
+  const groupMovementsByDateAndType = (movements) => {
+    const groupedData = {}
+
+    movements.forEach((movement) => {
+      const date = new Date(movement.movement_date)
+      const dateStr = date.toLocaleDateString("en-US", { weekday: "short" })
+
+      if (!groupedData[dateStr]) {
+        groupedData[dateStr] = { IN: 0, OUT: 0 }
+      }
+
+      const type = movement.movement_type
+      const quantity = Number(movement.quantity) || 0
+
+      groupedData[dateStr][type] += quantity
+    })
+
+    return groupedData
+  }
+
+  // Format grouped data for Google Charts
+  const formatDataForChart = (groupedData) => {
+    const chartData = [["Day", "Stock In", "Stock Out"]]
+
+    // If we have real data, use it
+    if (Object.keys(groupedData).length > 0) {
+      Object.entries(groupedData).forEach(([date, data]) => {
+        chartData.push([date, data.IN || 0, data.OUT || 0])
+      })
+    } else {
+      // If no data, return default data
+      return getDefaultStockTrendData()
+    }
+
+    return chartData
+  }
+
+  // Default stock trend data when no real data is available
+  const getDefaultStockTrendData = () => {
+    return [
+      ["Day", "Stock In", "Stock Out"],
+      ["Mon", 45, 22],
+      ["Tue", 38, 25],
+      ["Wed", 55, 30],
+      ["Thu", 41, 18],
+      ["Fri", 60, 35],
+      ["Sat", 25, 15],
+      ["Sun", 10, 5],
+    ]
   }
 
   const formatDateTime = (timestamp) => {
@@ -69,21 +195,10 @@ function Dashboard() {
     return date.toLocaleString()
   }
 
+  if (loading) return <div className="dashboard-error-alert">Loading dashboard data...</div>
   if (error) {
     return <div className="dashboard-error-alert">{error}</div>
   }
-
-  // Line chart data - Using simple strings instead of Date objects
-  const stockTrendData = [
-    ["Day", "Stock In", "Stock Out"],
-    ["Mon", 45, 22],
-    ["Tue", 38, 25],
-    ["Wed", 55, 30],
-    ["Thu", 41, 18],
-    ["Fri", 60, 35],
-    ["Sat", 25, 15],
-    ["Sun", 10, 5],
-  ]
 
   // Pie chart data
   const categoryDistributionData = [
@@ -257,10 +372,10 @@ function Dashboard() {
               </div>
             </div>
             <Chart
-              chartType="ColumnChart" // Changed from LineChart to ColumnChart
+              chartType="ColumnChart"
               width="100%"
               height="300px"
-              data={stockTrendData}
+              data={stats.stockTrendData}
               options={{
                 title: "",
                 legend: { position: "bottom" },
@@ -386,54 +501,81 @@ function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Laptop Dell XPS</td>
-                <td>5</td>
-                <td>10</td>
-                <td>
-                  <span className="dashboard-status-badge dashboard-status-out">Critical</span>
-                </td>
-                <td>
-                  <Link
-                    to="/stock-movements/new"
-                    className="dashboard-btn dashboard-btn-sm dashboard-btn-outline-primary"
-                  >
-                    Restock
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <td>HP Printer Ink</td>
-                <td>8</td>
-                <td>15</td>
-                <td>
-                  <span className="dashboard-status-badge dashboard-status-pending">Low</span>
-                </td>
-                <td>
-                  <Link
-                    to="/stock-movements/new"
-                    className="dashboard-btn dashboard-btn-sm dashboard-btn-outline-primary"
-                  >
-                    Restock
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <td>Wireless Mouse</td>
-                <td>12</td>
-                <td>20</td>
-                <td>
-                  <span className="dashboard-status-badge dashboard-status-pending">Low</span>
-                </td>
-                <td>
-                  <Link
-                    to="/stock-movements/new"
-                    className="dashboard-btn dashboard-btn-sm dashboard-btn-outline-primary"
-                  >
-                    Restock
-                  </Link>
-                </td>
-              </tr>
+              {Array.isArray(stats.lowStockItemsList) && stats.lowStockItemsList.length > 0 ? (
+                stats.lowStockItemsList.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.name}</td>
+                    <td>{item.quantity}</td>
+                    <td>10</td>
+                    <td>
+                      <span
+                        className={`dashboard-status-badge ${item.quantity < 5 ? "dashboard-status-out" : "dashboard-status-pending"}`}
+                      >
+                        {item.quantity < 5 ? "Critical" : "Low"}
+                      </span>
+                    </td>
+                    <td>
+                      <Link
+                        to="/stock-movements/new"
+                        className="dashboard-btn dashboard-btn-sm dashboard-btn-outline-primary"
+                      >
+                        Restock
+                      </Link>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <>
+                  <tr>
+                    <td>Laptop Dell XPS</td>
+                    <td>5</td>
+                    <td>10</td>
+                    <td>
+                      <span className="dashboard-status-badge dashboard-status-out">Critical</span>
+                    </td>
+                    <td>
+                      <Link
+                        to="/stock-movements/new"
+                        className="dashboard-btn dashboard-btn-sm dashboard-btn-outline-primary"
+                      >
+                        Restock
+                      </Link>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>HP Printer Ink</td>
+                    <td>8</td>
+                    <td>15</td>
+                    <td>
+                      <span className="dashboard-status-badge dashboard-status-pending">Low</span>
+                    </td>
+                    <td>
+                      <Link
+                        to="/stock-movements/new"
+                        className="dashboard-btn dashboard-btn-sm dashboard-btn-outline-primary"
+                      >
+                        Restock
+                      </Link>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Wireless Mouse</td>
+                    <td>12</td>
+                    <td>20</td>
+                    <td>
+                      <span className="dashboard-status-badge dashboard-status-pending">Low</span>
+                    </td>
+                    <td>
+                      <Link
+                        to="/stock-movements/new"
+                        className="dashboard-btn dashboard-btn-sm dashboard-btn-outline-primary"
+                      >
+                        Restock
+                      </Link>
+                    </td>
+                  </tr>
+                </>
+              )}
             </tbody>
           </table>
         </div>

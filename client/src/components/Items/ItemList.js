@@ -1,76 +1,106 @@
-import React, { useState, useEffect } from 'react';
-import './ItemList.css'; // Add custom styles for the modal
+"use client"
+
+import { useState, useEffect, useRef } from "react"
+import "./ItemList.css"
 
 function ItemList() {
-  const [items, setItems] = useState([]);
-  const [error, setError] = useState(null);
-  const [showModal, setShowModal] = useState(false); // State to control Add New Item modal visibility
-  const [viewItem, setViewItem] = useState(null); // State for viewing an item
-  const [editItem, setEditItem] = useState(null); // State for editing an item
-  const [newItem, setNewItem] = useState({ name: '', description: '', quantity: '', unit_price: '' });
-  const [editForm, setEditForm] = useState({ name: '', description: '', quantity: '', unit_price: '' });
+  const [items, setItems] = useState([])
+  const [error, setError] = useState(null)
+  const [showModal, setShowModal] = useState(false)
+  const [viewItem, setViewItem] = useState(null)
+  const [editItem, setEditItem] = useState(null)
+  const [newItem, setNewItem] = useState({ name: "", description: "", quantity: "", unit_price: "" })
+  const [editForm, setEditForm] = useState({ name: "", description: "", quantity: "", unit_price: "" })
+  const [isLoading, setIsLoading] = useState(true)
 
+  // Use a ref to track if the component is mounted
+  const isMounted = useRef(true)
+
+  // Fetch items only once when component mounts
   useEffect(() => {
-    fetchItems();
-  }, []);
+    fetchItems()
+
+    // Cleanup function to set isMounted to false when component unmounts
+    return () => {
+      isMounted.current = false
+    }
+  }, [])
 
   const fetchItems = async () => {
+    if (!isMounted.current) return
+
+    setIsLoading(true)
     try {
-      const response = await fetch('http://localhost:5000/api/items');
-      const data = await response.json();
-      setItems(Array.isArray(data) ? data : []);
+      const response = await fetch("http://localhost:5000/api/items")
+      const data = await response.json()
+
+      // Only update state if component is still mounted
+      if (isMounted.current) {
+        setItems(Array.isArray(data) ? data : [])
+        setError(null)
+      }
     } catch (error) {
-      console.error('Error fetching items:', error);
-      setError('Error loading items');
-      setItems([]);
+      console.error("Error fetching items:", error)
+      if (isMounted.current) {
+        setError("Error loading items")
+        setItems([])
+      }
+    } finally {
+      if (isMounted.current) {
+        setIsLoading(false)
+      }
     }
-  };
+  }
 
   const formatDateTime = (timestamp) => {
-    if (!timestamp) return '';
-    const date = new Date(timestamp);
-    return date.toLocaleString(); // This will show both date and time in local format
-  };
+    if (!timestamp) return ""
+    const date = new Date(timestamp)
+    return date.toLocaleString()
+  }
 
   const handleAddItem = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/items', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("http://localhost:5000/api/items", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newItem),
-      });
+      })
       if (response.ok) {
-        fetchItems(); // Refresh the item list
-        setShowModal(false); // Close the modal
-        setNewItem({ name: '', description: '', quantity: '', unit_price: '' }); // Reset the form
+        fetchItems()
+        setShowModal(false)
+        setNewItem({ name: "", description: "", quantity: "", unit_price: "" })
       } else {
-        console.error('Failed to add item');
+        console.error("Failed to add item")
       }
     } catch (error) {
-      console.error('Error adding item:', error);
+      console.error("Error adding item:", error)
     }
-  };
+  }
 
   const handleEditSubmit = async () => {
     try {
       const response = await fetch(`http://localhost:5000/api/items/${editItem.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editForm),
-      });
+      })
       if (response.ok) {
-        fetchItems(); // Refresh the item list
-        setEditItem(null); // Close the edit modal
+        fetchItems()
+        setEditItem(null)
       } else {
-        console.error('Failed to update item');
+        console.error("Failed to update item")
       }
     } catch (error) {
-      console.error('Error updating item:', error);
+      console.error("Error updating item:", error)
     }
-  };
+  }
 
   if (error) {
-    return <div className="alert alert-danger">{error}</div>;
+    return <div className="alert alert-danger">{error}</div>
+  }
+
+  if (isLoading) {
+    return <div className="loading">Loading items...</div>
   }
 
   return (
@@ -106,8 +136,8 @@ function ItemList() {
                   <button
                     className="btn btn-warning btn-sm mx-2"
                     onClick={() => {
-                      setEditItem(item);
-                      setEditForm(item); // Populate the edit form with the item's data
+                      setEditItem(item)
+                      setEditForm(item)
                     }}
                   >
                     Edit
@@ -176,10 +206,18 @@ function ItemList() {
         <div className="modal-overlay">
           <div className="modal-content">
             <h3>Item Details</h3>
-            <p><strong>Name:</strong> {viewItem.name}</p>
-            <p><strong>Description:</strong> {viewItem.description}</p>
-            <p><strong>Quantity:</strong> {viewItem.quantity}</p>
-            <p><strong>Unit Price:</strong> ${viewItem.unit_price}</p>
+            <p>
+              <strong>Name:</strong> {viewItem.name}
+            </p>
+            <p>
+              <strong>Description:</strong> {viewItem.description}
+            </p>
+            <p>
+              <strong>Quantity:</strong> {viewItem.quantity}
+            </p>
+            <p>
+              <strong>Unit Price:</strong> ${viewItem.unit_price}
+            </p>
             <button className="btn btn-secondary" onClick={() => setViewItem(null)}>
               Close
             </button>
@@ -240,7 +278,7 @@ function ItemList() {
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export default ItemList;
+export default ItemList

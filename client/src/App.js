@@ -15,7 +15,7 @@ import Products from "./components/Products/Products"
 import Orders from "./components/Orders/Orders"
 import Reports from "./components/Reports/Reports"
 import Company from "./components/Companys/Company"
-import Profile from "./components/Profile/Profile"
+
 import ItemList from "./components/Items/ItemList"
 import ItemForm from "./components/Items/ItemForm"
 import ItemDetail from "./components/Items/ItemDetail"
@@ -26,6 +26,7 @@ import ProtectedRoute from "./components/ProtectedRoute"
 
 import "./styles/main.css"
 import "./App.css"
+import UserProfile from "./components/UserProfile/UserProfile"
 
 function App() {
   return (
@@ -72,7 +73,7 @@ function ProtectedLayout() {
               <Route path="/orders" element={<Orders />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="/company" element={<Company />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/profile" element={<UserProfile />} />
               <Route path="/items" element={<ItemList />} />
               <Route path="/items/new" element={<ItemForm />} />
               <Route path="/items/:id" element={<ItemDetail />} />

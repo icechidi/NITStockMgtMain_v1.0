@@ -6,16 +6,12 @@ import { AuthContext } from "../../context/AuthContext"
 import "../Login/Login.css"
 
 function Register() {
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  })
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [debugInfo, setDebugInfo] = useState(null)
-  const { register, currentUser, error } = useContext(AuthContext)
+  const { register, currentUser } = useContext(AuthContext)
   const navigate = useNavigate()
 
   // Redirect if already logged in
@@ -25,33 +21,13 @@ function Register() {
     }
   }, [currentUser, navigate])
 
-  // Update error message from context
-  useEffect(() => {
-    if (error) {
-      setErrorMessage(error)
-    }
-  }, [error])
-
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
-  }
-
   const handleRegister = async (e) => {
     e.preventDefault()
     setErrorMessage("")
-    setIsLoading(true)
-    setDebugInfo(null)
-
-    const { username, email, password, confirmPassword } = formData
 
     // Basic validation
     if (!username.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
       setErrorMessage("All fields are required")
-      setIsLoading(false)
       return
     }
 
@@ -59,58 +35,47 @@ function Register() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
       setErrorMessage("Please enter a valid email address.")
-      setIsLoading(false)
       return
     }
 
-    // Validate password standards
+    // Validate password standards - simplified for demo
     if (password.length < 6) {
       setErrorMessage("Password must be at least 6 characters long.")
-      setIsLoading(false)
       return
     }
 
     // Check if passwords match
     if (password !== confirmPassword) {
       setErrorMessage("Passwords do not match.")
-      setIsLoading(false)
       return
     }
 
     try {
-      console.log("Sending registration data:", {
-        username,
-        email,
-        passwordLength: password.length,
-      })
+      // For demo purposes, we'll simulate a successful registration
+      register({ username, email, role: "admin" })
+      navigate("/dashboard")
 
-      // Direct API call for debugging
-      const response = await fetch("http://localhost:5000/api/auth/register", {
+      /* Uncomment this for real backend integration
+      const response = await fetch("http://localhost:5000/api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, email, password }),
-      })
+      });
 
-      const data = await response.json()
-      console.log("Registration response:", data)
+      const data = await response.json();
 
       if (response.ok) {
-        // Store token and user data
-        localStorage.setItem("token", data.token)
-        localStorage.setItem("user", JSON.stringify(data.user))
-        navigate("/dashboard")
+        register({ username, email, role: data.role || "user" });
+        navigate("/dashboard");
       } else {
-        setErrorMessage(data.message || "Registration failed. Please try again.")
-        setDebugInfo(data)
+        setErrorMessage(data.message || "Registration failed. Please try again.");
       }
+      */
     } catch (error) {
       console.error("Error during registration:", error)
-      setErrorMessage(`Registration error: ${error.message}`)
-      setDebugInfo({ error: error.toString() })
-    } finally {
-      setIsLoading(false)
+      setErrorMessage("An error occurred. Please try again.")
     }
   }
 
@@ -127,10 +92,9 @@ function Register() {
               id="username"
               name="username"
               className="form-control"
-              value={formData.username}
-              onChange={handleChange}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
-              disabled={isLoading}
             />
           </div>
           <div className="form-group">
@@ -140,10 +104,9 @@ function Register() {
               id="email"
               name="email"
               className="form-control"
-              value={formData.email}
-              onChange={handleChange}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
-              disabled={isLoading}
             />
           </div>
           <div className="form-group">
@@ -153,10 +116,9 @@ function Register() {
               id="password"
               name="password"
               className="form-control"
-              value={formData.password}
-              onChange={handleChange}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
-              disabled={isLoading}
             />
           </div>
           <div className="form-group">
@@ -166,26 +128,18 @@ function Register() {
               id="confirmPassword"
               name="confirmPassword"
               className="form-control"
-              value={formData.confirmPassword}
-              onChange={handleChange}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              disabled={isLoading}
             />
           </div>
-          <button type="submit" className="btn btn-primary" disabled={isLoading}>
-            {isLoading ? "Registering..." : "Register"}
+          <button type="submit" className="btn btn-primary">
+            Register
           </button>
           <p className="mt-3 text-center">
             Already have an account? <Link to="/login">Login</Link>
           </p>
         </form>
-
-        {debugInfo && (
-          <div className="mt-4 p-3 bg-light border rounded">
-            <h5>Debug Information</h5>
-            <pre style={{ whiteSpace: "pre-wrap" }}>{JSON.stringify(debugInfo, null, 2)}</pre>
-          </div>
-        )}
       </div>
     </div>
   )
