@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
 import { AuthProvider } from "./context/AuthContext"
+import { ThemeProvider } from "./context/ThemeContext"
 import Header from "./components/Header/Header"
 import Navbar from "./components/Navbar/Navbar"
 import Login from "./components/Login/Login"
@@ -31,9 +32,11 @@ import UserProfile from "./components/UserProfile/UserProfile"
 function App() {
   return (
     <Router>
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
+      </ThemeProvider>
     </Router>
   )
 }
