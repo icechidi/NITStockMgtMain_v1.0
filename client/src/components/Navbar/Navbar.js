@@ -17,6 +17,7 @@ import {
   FaBoxOpen,
   FaShoppingCart,
   FaClipboardList,
+  FaBox,
 } from "react-icons/fa"
 import { AuthContext } from "../../context/AuthContext"
 import "./Navbar.css"
@@ -83,6 +84,11 @@ function Navbar() {
           <li className="navbar-nav-item">
             <Link to="/dashboard" className={`navbar-nav-link ${location.pathname === "/dashboard" ? "active" : ""}`}>
               <FaTachometerAlt className="navbar-nav-icon" /> Dashboard
+            </Link>
+          </li>
+          <li className="navbar-nav-item">
+            <Link to="/items" className={`navbar-nav-link ${location.pathname === "/items" ? "active" : ""}`}>
+              <FaBox className="navbar-nav-icon" /> Items
             </Link>
           </li>
           <li className="navbar-nav-item">
