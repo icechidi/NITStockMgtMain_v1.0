@@ -1,8 +1,8 @@
-"use client"
+"\"use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { Link } from "react-router-dom"
-import { FaPlus, FaSearch, FaEdit, FaEye, FaTrash, FaBox, FaSort, FaSortUp, FaSortDown } from "react-icons/fa"
+import { FaPlus, FaSearch, FaEdit, FaEye, FaTrash, FaBox, FaSort, FaSortUp, FaSortDown, FaFilter } from "react-icons/fa"
 import "./ItemList.css"
 
 function ItemList() {
@@ -19,71 +19,25 @@ function ItemList() {
   const [searchTerm, setSearchTerm] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage] = useState(10)
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: null })
+  const [sortConfig, setSortConfig] = useState({ key: "name", direction: "ascending" })
+  const [categoryFilter, setCategoryFilter] = useState("all")
+  const [statusFilter, setStatusFilter] = useState("all")
 
   // Use a ref to track if the component is mounted
   const isMounted = useRef(true)
   const modalRef = useRef(null)
 
-  // Fetch items only once when component mounts
-  useEffect(() => {
-    fetchItems();
-
-    // Cleanup function to set isMounted to false when component unmounts
-    return () => {
-      isMounted.current = false
-    }
-  }, [fetchItems]);
-
-  // Filter and sort items when items, searchTerm, or sortConfig changes
-  useEffect(() => {
-    let result = [...items]
-
-    // Filter by search term
-    if (searchTerm) {
-      result = result.filter(
-        (item) =>
-          item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.description.toLowerCase().includes(searchTerm.toLowerCase()),
-      )
-    }
-
-    // Sort items
-    if (sortConfig.key) {
-      result.sort((a, b) => {
-        if (a[sortConfig.key] < b[sortConfig.key]) {
-          return sortConfig.direction === "ascending" ? -1 : 1
-        }
-        if (a[sortConfig.key] > b[sortConfig.key]) {
-          return sortConfig.direction === "ascending" ? 1 : -1
-        }
-        return 0
-      })
-    }
-
-    setFilteredItems(result)
-  }, [items, searchTerm, sortConfig])
-
-  // Close modal when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        closeAllModals()
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [])
-
-  const fetchItems = async () => {
+  // Fetch items function with useCallback
+  const fetchItems = useCallback(async () => {
     if (!isMounted.current) return
 
     setIsLoading(true)
     try {
       const response = await fetch("http://localhost:5000/api/items")
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
+
       const data = await response.json()
 
       // Only update state if component is still mounted
@@ -113,7 +67,77 @@ function ItemList() {
         setIsLoading(false)
       }
     }
-  }
+  }, [])
+
+  // Fetch items only once when component mounts
+  useEffect(() => {
+    fetchItems()
+
+    // Cleanup function to set isMounted to false when component unmounts
+    return () => {
+      isMounted.current = false
+    }
+  }, [fetchItems])
+
+  // Filter and sort items when items, searchTerm, or sortConfig changes
+  useEffect(() => {
+    let result = [...items]
+
+    // Filter by search term
+    if (searchTerm) {
+      result = result.filter(
+        (item) =>
+          item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.description?.toLowerCase().includes(searchTerm.toLowerCase()),
+      )
+    }
+
+    // Filter by category
+    if (categoryFilter !== "all") {
+      result = result.filter((item) => item.category === categoryFilter)
+    }
+
+    // Filter by status
+    if (statusFilter !== "all") {
+      if (statusFilter === "inStock") {
+        result = result.filter((item) => item.quantity > 10)
+      } else if (statusFilter === "lowStock") {
+        result = result.filter((item) => item.quantity > 0 && item.quantity <= 10)
+      } else if (statusFilter === "outOfStock") {
+        result = result.filter((item) => item.quantity <= 0)
+      }
+    }
+
+    // Sort items
+    if (sortConfig.key) {
+      result.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === "ascending" ? -1 : 1
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === "ascending" ? 1 : -1
+        }
+        return 0
+      })
+    }
+
+    setFilteredItems(result)
+    setCurrentPage(1) // Reset to first page when filters change
+  }, [items, searchTerm, sortConfig, categoryFilter, statusFilter])
+
+  // Close modal when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        closeAllModals()
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
 
   const generateDummyItems = (count) => {
     const categories = ["Electronics", "Office Supplies", "Furniture", "IT Equipment", "Tools"]
@@ -146,54 +170,77 @@ function ItemList() {
 
   const handleAddItem = async () => {
     try {
+      setIsLoading(true)
       const response = await fetch("http://localhost:5000/api/items", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newItem),
+        body: JSON.stringify({
+          ...newItem,
+          quantity: Number(newItem.quantity),
+          unit_price: Number(newItem.unit_price),
+        }),
       })
-      if (response.ok) {
-        fetchItems()
-        setShowModal(false)
-        setNewItem({ name: "", description: "", quantity: "", unit_price: "" })
-      } else {
-        console.error("Failed to add item")
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`)
       }
+
+      await fetchItems()
+      setShowModal(false)
+      setNewItem({ name: "", description: "", quantity: "", unit_price: "" })
     } catch (error) {
       console.error("Error adding item:", error)
+      setError("Failed to add item. Please try again.")
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const handleEditSubmit = async () => {
     try {
+      setIsLoading(true)
       const response = await fetch(`http://localhost:5000/api/items/${editItem.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editForm),
+        body: JSON.stringify({
+          ...editForm,
+          quantity: Number(editForm.quantity),
+          unit_price: Number(editForm.unit_price),
+        }),
       })
-      if (response.ok) {
-        fetchItems()
-        setEditItem(null)
-      } else {
-        console.error("Failed to update item")
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`)
       }
+
+      await fetchItems()
+      setEditItem(null)
     } catch (error) {
       console.error("Error updating item:", error)
+      setError("Failed to update item. Please try again.")
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const handleDeleteItem = async () => {
     try {
+      setIsLoading(true)
       const response = await fetch(`http://localhost:5000/api/items/${deleteItem.id}`, {
         method: "DELETE",
       })
-      if (response.ok) {
-        fetchItems()
-        setDeleteItem(null)
-      } else {
-        console.error("Failed to delete item")
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`)
       }
+
+      await fetchItems()
+      setDeleteItem(null)
     } catch (error) {
       console.error("Error deleting item:", error)
+      setError("Failed to delete item. Please try again.")
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -237,10 +284,21 @@ function ItemList() {
     }
   }
 
+  const resetFilters = () => {
+    setSearchTerm("")
+    setCategoryFilter("all")
+    setStatusFilter("all")
+    setSortConfig({ key: "name", direction: "ascending" })
+  }
+
+  // Get unique categories from items
+  const categories = ["all", ...new Set(items.map((item) => item.category))].filter(Boolean)
+
   if (isLoading) {
     return (
       <div className="loading-container">
         <div className="loading-spinner"></div>
+        <p className="mt-3">Loading items...</p>
       </div>
     )
   }
@@ -266,6 +324,38 @@ function ItemList() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+      </div>
+
+      <div className="d-flex gap-3 mb-4">
+        <div className="form-group" style={{ minWidth: "200px" }}>
+          <label className="form-label">Category</label>
+          <select className="form-select" value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
+            <option value="all">All Categories</option>
+            {categories
+              .filter((c) => c !== "all")
+              .map((category, index) => (
+                <option key={index} value={category}>
+                  {category}
+                </option>
+              ))}
+          </select>
+        </div>
+
+        <div className="form-group" style={{ minWidth: "200px" }}>
+          <label className="form-label">Stock Status</label>
+          <select className="form-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+            <option value="all">All Status</option>
+            <option value="inStock">In Stock</option>
+            <option value="lowStock">Low Stock</option>
+            <option value="outOfStock">Out of Stock</option>
+          </select>
+        </div>
+
+        <div className="form-group d-flex align-items-end">
+          <button className="btn btn-outline-secondary" onClick={resetFilters}>
+            <FaFilter className="mr-2" /> Reset Filters
+          </button>
+        </div>
       </div>
 
       {/* Desktop Table View */}
@@ -376,6 +466,9 @@ function ItemList() {
               <FaBox />
             </div>
             <p className="empty-state-text">No items found. Try a different search term or add new items.</p>
+            <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+              <FaPlus className="mr-2" /> Add New Item
+            </button>
           </div>
         )}
       </div>
@@ -437,6 +530,24 @@ function ItemList() {
                 ></textarea>
               </div>
               <div className="form-group">
+                <label className="form-label">Category</label>
+                <select
+                  className="form-select"
+                  value={newItem.category || ""}
+                  onChange={(e) => setNewItem({ ...newItem, category: e.target.value })}
+                >
+                  <option value="">Select a category</option>
+                  {categories
+                    .filter((c) => c !== "all")
+                    .map((category, index) => (
+                      <option key={index} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div className="form-group">
                 <label className="form-label">Quantity</label>
                 <input
                   type="number"
@@ -464,7 +575,11 @@ function ItemList() {
               <button className="btn btn-secondary" onClick={() => setShowModal(false)}>
                 Cancel
               </button>
-              <button className="btn btn-success" onClick={handleAddItem}>
+              <button
+                className="btn btn-success"
+                onClick={handleAddItem}
+                disabled={!newItem.name || !newItem.quantity || !newItem.unit_price}
+              >
                 Save Item
               </button>
             </div>
@@ -489,7 +604,11 @@ function ItemList() {
               </div>
               <div className="form-group">
                 <label className="form-label">Description</label>
-                <p>{viewItem.description}</p>
+                <p>{viewItem.description || "No description provided"}</p>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Category</label>
+                <p>{viewItem.category || "Uncategorized"}</p>
               </div>
               <div className="form-group">
                 <label className="form-label">Quantity</label>
@@ -544,10 +663,28 @@ function ItemList() {
                 <label className="form-label">Description</label>
                 <textarea
                   className="form-control"
-                  value={editForm.description}
+                  value={editForm.description || ""}
                   onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
                   rows="3"
                 ></textarea>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Category</label>
+                <select
+                  className="form-select"
+                  value={editForm.category || ""}
+                  onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
+                >
+                  <option value="">Select a category</option>
+                  {categories
+                    .filter((c) => c !== "all")
+                    .map((category, index) => (
+                      <option key={index} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  <option value="Other">Other</option>
+                </select>
               </div>
               <div className="form-group">
                 <label className="form-label">Quantity</label>
@@ -575,7 +712,11 @@ function ItemList() {
               <button className="btn btn-secondary" onClick={() => setEditItem(null)}>
                 Cancel
               </button>
-              <button className="btn btn-success" onClick={handleEditSubmit}>
+              <button
+                className="btn btn-success"
+                onClick={handleEditSubmit}
+                disabled={!editForm.name || !editForm.quantity || !editForm.unit_price}
+              >
                 Save Changes
               </button>
             </div>
@@ -594,7 +735,10 @@ function ItemList() {
               </button>
             </div>
             <div className="modal-body">
-              <p>Are you sure you want to delete the item "{deleteItem.name}"?</p>
+              <p>Are you sure you want to delete this item?</p>
+              <p>
+                <strong>Name:</strong> {deleteItem.name}
+              </p>
               <p>This action cannot be undone.</p>
             </div>
             <div className="modal-footer">

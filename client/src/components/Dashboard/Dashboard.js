@@ -39,7 +39,9 @@ function Dashboard() {
   })
   const [error, setError] = useState(null)
   const [timeframe, setTimeframe] = useState("week")
+  const [isChartLoading, setIsChartLoading] = useState(true)
 
+//update here
   // Process stock movement data into trend data for the chart
   const processStockTrendData = useCallback((movements, timeframe) => {
     if (!Array.isArray(movements) || movements.length === 0) {
@@ -65,11 +67,16 @@ function Dashboard() {
   const fetchItems = useCallback(async () => {
     try {
       const response = await fetch("http://localhost:5000/api/items")
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
       const data = await response.json()
       setItems(Array.isArray(data) ? data : [])
+      return data
     } catch (err) {
       console.error("Error fetching items:", err)
-      setError("Failed to load items data")
+      setError("Failed to load items data. Please try again later.")
+      return []
     }
   }, [])
 
