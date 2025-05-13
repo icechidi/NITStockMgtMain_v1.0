@@ -5,19 +5,19 @@ function Stores() {
   return (
     <div className="stores-dashboard">
       <header className="stores-header">
-        <h1>Stores Dashboard</h1>
-        <p>Track and manage all stores and their products efficiently.</p>
+        {/* <h1>Stores Dashboard</h1>
+        <p>Track and manage all stores and their products efficiently.</p> */}
       </header>
 
       {/* Overview Section */}
       <section className="stores-overview-section">
         <h2>Overview</h2>
         <div className="stores-overview-cards">
-          <div className="stores-card">
+          <div className="stores-card-stores">
             <h3>Total Stores</h3>
             <p>15</p>
           </div>
-          <div className="stores-card">
+          <div className="stores-card-products">
             <h3>Total Products</h3>
             <p>120</p>
           </div>
