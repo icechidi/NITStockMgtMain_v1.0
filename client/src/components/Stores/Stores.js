@@ -21,7 +21,7 @@ function Stores() {
             <h3>Total Products</h3>
             <p>120</p>
           </div>
-          <div className="stores-card">
+          <div className="stores-card-active">
             <h3>Active Stores</h3>
             <p>12</p>
           </div>
