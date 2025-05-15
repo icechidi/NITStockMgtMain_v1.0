@@ -58,7 +58,7 @@ function StockMovementList() {
     return () => {
       isMounted.current = false
     }
-  }, [])
+  }, [fetchMovements])
 
   // Filter and sort movements when movements, searchTerm, typeFilter, dateRange, or sortConfig changes
   useEffect(() => {

@@ -39,9 +39,7 @@ function Dashboard() {
   })
   const [error, setError] = useState(null)
   const [timeframe, setTimeframe] = useState("week")
-  const [isChartLoading, setIsChartLoading] = useState(true)
 
-//update here
   // Process stock movement data into trend data for the chart
   const processStockTrendData = useCallback((movements, timeframe) => {
     if (!Array.isArray(movements) || movements.length === 0) {
@@ -61,7 +59,7 @@ function Dashboard() {
     // Format data for Google Charts
     const chartData = formatDataForChart(groupedData)
     setStats((prevStats) => ({ ...prevStats, stockTrendData: chartData }))
-  }) // Empty dependency array since this doesn't depend on any external variables
+  }, []) // Add empty dependency array here
 
   // Use useCallback to memoize the fetch functions
   const fetchItems = useCallback(async () => {

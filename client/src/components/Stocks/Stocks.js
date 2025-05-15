@@ -1,47 +1,118 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import axios from "axios"
 import "./Stocks.css"
 
 function Stocks() {
-  const [stocks, setStocks] = useState([
-    { id: 1, location: "Main Warehouse", totalItems: 1250, lowStock: 45, value: 125000 },
-    { id: 2, location: "Store A", totalItems: 350, lowStock: 12, value: 42000 },
-    { id: 3, location: "Store B", totalItems: 420, lowStock: 18, value: 51000 },
-    { id: 4, location: "Distribution Center", totalItems: 780, lowStock: 30, value: 95000 },
-  ])
-
-  const [stockItems, setStockItems] = useState([
-    { id: 1, name: "Laptop Dell XPS", location: "Main Warehouse", quantity: 25, minQuantity: 10, status: "In Stock" },
-    { id: 2, name: "iPhone 13", location: "Store A", quantity: 8, minQuantity: 10, status: "Low Stock" },
-    { id: 3, name: 'Samsung TV 55"', location: "Store B", quantity: 15, minQuantity: 5, status: "In Stock" },
-    {
-      id: 4,
-      name: "Logitech Mouse",
-      location: "Distribution Center",
-      quantity: 50,
-      minQuantity: 20,
-      status: "In Stock",
-    },
-    { id: 5, name: "HP Printer", location: "Main Warehouse", quantity: 12, minQuantity: 15, status: "Low Stock" },
-    { id: 6, name: "Mechanical Keyboard", location: "Store A", quantity: 5, minQuantity: 8, status: "Low Stock" },
-  ])
-
+  const [stocks, setStocks] = useState([])
+  const [stockItems, setStockItems] = useState([])
+  const [categories, setCategories] = useState([])
+  const [stores, setStores] = useState([])
+  const [selectedCategory, setSelectedCategory] = useState('all')
   const [showModal, setShowModal] = useState(false)
-  const [newStockLocation, setNewStockLocation] = useState({ location: "", totalItems: 0, lowStock: 0, value: 0 })
+  const [showAddItemModal, setShowAddItemModal] = useState(false)
+  const [newStockLocation, setNewStockLocation] = useState({ 
+    location: "", 
+    totalItems: 0, 
+    lowStock: 0, 
+    value: 0,
+    sourceStore: "" 
+  })
+  const [newStockItem, setNewStockItem] = useState({
+    name: "",
+    location: "",
+    quantity: 0,
+    minQuantity: 0,
+    category: "",
+    sourceStore: ""
+  })
 
-  const handleAddStockLocation = () => {
-    // In a real app, you would send this to your backend
-    const newId = Math.max(...stocks.map((s) => s.id)) + 1
-    setStocks([...stocks, { ...newStockLocation, id: newId }])
-    setNewStockLocation({ location: "", totalItems: 0, lowStock: 0, value: 0 })
-    setShowModal(false)
+  useEffect(() => {
+    fetchStocks()
+    fetchStockItems()
+    fetchCategories()
+    fetchStores()
+  }, [])
+
+  const fetchStocks = async () => {
+    try {
+      const response = await axios.get('/api/stocks')
+      setStocks(response.data)
+    } catch (error) {
+      console.error('Error fetching stocks:', error)
+    }
   }
 
-  const handleTransferStock = (itemId, newLocation) => {
-    // In a real app, you would send this to your backend
-    setStockItems(stockItems.map((item) => (item.id === itemId ? { ...item, location: newLocation } : item)))
+  const fetchStockItems = async () => {
+    try {
+      const response = await axios.get('/api/stock-items')
+      setStockItems(response.data)
+    } catch (error) {
+      console.error('Error fetching stock items:', error)
+    }
   }
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get('/api/categories')
+      setCategories(response.data)
+    } catch (error) {
+      console.error('Error fetching categories:', error)
+    }
+  }
+
+  const fetchStores = async () => {
+    try {
+      const response = await axios.get('/api/stores')
+      setStores(response.data)
+    } catch (error) {
+      console.error('Error fetching stores:', error)
+    }
+  }
+
+  const handleAddStockLocation = async () => {
+    try {
+      const response = await axios.post('/api/stocks', newStockLocation)
+      setStocks([...stocks, response.data])
+      setNewStockLocation({ location: "", totalItems: 0, lowStock: 0, value: 0, sourceStore: "" })
+      setShowModal(false)
+    } catch (error) {
+      console.error('Error adding stock location:', error)
+    }
+  }
+
+  const handleAddStockItem = async () => {
+    try {
+      const response = await axios.post('/api/stock-items', newStockItem)
+      setStockItems([...stockItems, response.data])
+      setNewStockItem({
+        name: "",
+        location: "",
+        quantity: 0,
+        minQuantity: 0,
+        category: "",
+        sourceStore: ""
+      })
+    } catch (error) {
+      console.error('Error adding stock item:', error)
+    }
+  }
+
+  const handleTransferStock = async (itemId, newLocation) => {
+    try {
+      await axios.put(`/api/stock-items/${itemId}/transfer`, { newLocation })
+      setStockItems(stockItems.map((item) => 
+        item.id === itemId ? { ...item, location: newLocation } : item
+      ))
+    } catch (error) {
+      console.error('Error transferring stock:', error)
+    }
+  }
+
+  const filteredStockItems = selectedCategory === 'all' 
+    ? stockItems 
+    : stockItems.filter(item => item.category === selectedCategory)
 
   return (
     <div className="stocks-container">
@@ -49,9 +120,24 @@ function Stocks() {
       <p>Monitor and manage your inventory across different locations.</p>
 
       <div className="stock-actions mb-3">
-        <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+        <button className="btn btn-primary me-2" onClick={() => setShowModal(true)}>
           Add New Stock Location
         </button>
+        <button className="btn btn-success me-2" onClick={() => setShowAddItemModal(true)}>
+          Add New Stock Item
+        </button>
+        <select 
+          className="form-select d-inline-block w-auto ms-2"
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+        >
+          <option value="all">All Categories</option>
+          {categories.map(category => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="stock-overview">
@@ -85,16 +171,19 @@ function Stocks() {
           <thead>
             <tr>
               <th>Item Name</th>
+              <th>Category</th>
               <th>Location</th>
               <th>Quantity</th>
               <th>Status</th>
+              <th>Source Store</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {stockItems.map((item) => (
+            {filteredStockItems.map((item) => (
               <tr key={item.id} className={item.status === "Low Stock" ? "low-stock-row" : ""}>
                 <td>{item.name}</td>
+                <td>{item.category}</td>
                 <td>{item.location}</td>
                 <td>{item.quantity}</td>
                 <td>
@@ -102,6 +191,7 @@ function Stocks() {
                     {item.status}
                   </span>
                 </td>
+                <td>{item.sourceStore}</td>
                 <td>
                   <div className="dropdown">
                     <button
@@ -136,7 +226,6 @@ function Stocks() {
         </table>
       </div>
 
-      {/* Modal for Adding a New Stock Location */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -150,6 +239,21 @@ function Stocks() {
                   value={newStockLocation.location}
                   onChange={(e) => setNewStockLocation({ ...newStockLocation, location: e.target.value })}
                 />
+              </div>
+              <div className="form-group">
+                <label>Source Store</label>
+                <select
+                  className="form-control"
+                  value={newStockLocation.sourceStore}
+                  onChange={(e) => setNewStockLocation({ ...newStockLocation, sourceStore: e.target.value })}
+                >
+                  <option value="">Select Store</option>
+                  {stores.map(store => (
+                    <option key={store.id} value={store.id}>
+                      {store.name}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="form-group">
                 <label>Initial Items</label>
@@ -177,6 +281,94 @@ function Stocks() {
                 Save
               </button>
               <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>
+                Cancel
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showAddItemModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Add New Stock Item</h3>
+            <form>
+              <div className="form-group">
+                <label>Item Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={newStockItem.name}
+                  onChange={(e) => setNewStockItem({ ...newStockItem, name: e.target.value })}
+                />
+              </div>
+              <div className="form-group">
+                <label>Category</label>
+                <select
+                  className="form-control"
+                  value={newStockItem.category}
+                  onChange={(e) => setNewStockItem({ ...newStockItem, category: e.target.value })}
+                >
+                  <option value="">Select Category</option>
+                  {categories.map(category => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Location</label>
+                <select
+                  className="form-control"
+                  value={newStockItem.location}
+                  onChange={(e) => setNewStockItem({ ...newStockItem, location: e.target.value })}
+                >
+                  <option value="">Select Location</option>
+                  {stocks.map(stock => (
+                    <option key={stock.id} value={stock.location}>
+                      {stock.location}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Source Store</label>
+                <select
+                  className="form-control"
+                  value={newStockItem.sourceStore}
+                  onChange={(e) => setNewStockItem({ ...newStockItem, sourceStore: e.target.value })}
+                >
+                  <option value="">Select Store</option>
+                  {stores.map(store => (
+                    <option key={store.id} value={store.id}>
+                      {store.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Quantity</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={newStockItem.quantity}
+                  onChange={(e) => setNewStockItem({ ...newStockItem, quantity: parseInt(e.target.value) || 0 })}
+                />
+              </div>
+              <div className="form-group">
+                <label>Minimum Quantity</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={newStockItem.minQuantity}
+                  onChange={(e) => setNewStockItem({ ...newStockItem, minQuantity: parseInt(e.target.value) || 0 })}
+                />
+              </div>
+              <button type="button" className="btn btn-success" onClick={handleAddStockItem}>
+                Save
+              </button>
+              <button type="button" className="btn btn-secondary" onClick={() => setShowAddItemModal(false)}>
                 Cancel
               </button>
             </form>
