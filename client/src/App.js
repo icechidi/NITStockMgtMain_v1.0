@@ -85,18 +85,18 @@ function ProtectedLayout() {
                 path="/stores"
                 element={<ComingSoon pageTitle="Stores Management" pageType="under-development" />}
               />
-              <Route
+              {/* <Route
                 path="/stocks"
                 element={<ComingSoon pageTitle="Stock Management" pageType="under-development" />}
-              />
+              /> */}
               <Route
                 path="/attributes"
                 element={<ComingSoon pageTitle="Attributes Management" pageType="under-development" />}
               />
-              <Route
+              {/* <Route
                 path="/products"
                 element={<ComingSoon pageTitle="Products Management" pageType="under-development" />}
-              />
+              /> */}
               <Route
                 path="/orders"
                 element={<ComingSoon pageTitle="Orders Management" pageType="under-development" />}
@@ -127,6 +127,10 @@ function ProtectedLayout() {
               />
               <Route path="/requests" element={<ComingSoon pageTitle="Item Requests" pageType="under-development" />} />
 
+              <Route path="/stocks" element={<Stocks />} />
+              <Route path="/products" element={<Products />} />
+
+
               {/* Catch all route */}
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
 
@@ -134,9 +138,9 @@ function ProtectedLayout() {
               <Route path="/brands" element={<Brands />} />
               <Route path="/category" element={<Category />} />
               <Route path="/stores" element={<Stores />} />
-              <Route path="/stocks" element={<Stocks />} />
+
               <Route path="/attributes" element={<Attributes />} />
-              <Route path="/products" element={<Products />} />
+
               <Route path="/orders" element={<Orders />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="/company" element={<Company />} />
