@@ -16,13 +16,14 @@ import Products from "./components/Products/Products"
 import Orders from "./components/Orders/Orders"
 import Reports from "./components/Reports/Reports"
 import Company from "./components/Companys/Company"
-
 import ItemList from "./components/Items/ItemList"
 import ItemForm from "./components/Items/ItemForm"
 import ItemDetail from "./components/Items/ItemDetail"
 import StockMovementList from "./components/StockMovements/StockMovementList"
 import StockMovementForm from "./components/StockMovements/StockMovementForm"
 import Requests from "./components/Requests/Requests"
+
+import ComingSoon from "./components/ComingSoon/ComingSoon"
 import ProtectedRoute from "./components/ProtectedRoute"
 
 import "./styles/main.css"
@@ -66,7 +67,70 @@ function ProtectedLayout() {
           <div className="content">
             <Routes>
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/groups" element={<Groups />} />
+
+              {/* All other pages redirect to Coming Soon */}
+              <Route
+                path="/groups"
+                element={<ComingSoon pageTitle="Groups Management" pageType="under-development" />}
+              />
+              <Route
+                path="/brands"
+                element={<ComingSoon pageTitle="Brands Management" pageType="under-development" />}
+              />
+              <Route
+                path="/category"
+                element={<ComingSoon pageTitle="Category Management" pageType="under-development" />}
+              />
+              <Route
+                path="/stores"
+                element={<ComingSoon pageTitle="Stores Management" pageType="under-development" />}
+              />
+              <Route
+                path="/stocks"
+                element={<ComingSoon pageTitle="Stock Management" pageType="under-development" />}
+              />
+              <Route
+                path="/attributes"
+                element={<ComingSoon pageTitle="Attributes Management" pageType="under-development" />}
+              />
+              <Route
+                path="/products"
+                element={<ComingSoon pageTitle="Products Management" pageType="under-development" />}
+              />
+              <Route
+                path="/orders"
+                element={<ComingSoon pageTitle="Orders Management" pageType="under-development" />}
+              />
+              <Route
+                path="/reports"
+                element={<ComingSoon pageTitle="Reports & Analytics" pageType="under-development" />}
+              />
+              <Route
+                path="/company"
+                element={<ComingSoon pageTitle="Company Settings" pageType="under-development" />}
+              />
+              <Route path="/profile" element={<ComingSoon pageTitle="User Profile" pageType="under-development" />} />
+              <Route path="/items" element={<ComingSoon pageTitle="Items Management" pageType="under-development" />} />
+              <Route path="/items/new" element={<ComingSoon pageTitle="Add New Item" pageType="under-development" />} />
+              <Route path="/items/:id" element={<ComingSoon pageTitle="Item Details" pageType="under-development" />} />
+              <Route
+                path="/items/:id/edit"
+                element={<ComingSoon pageTitle="Edit Item" pageType="under-development" />}
+              />
+              <Route
+                path="/stock-movements"
+                element={<ComingSoon pageTitle="Stock Movements" pageType="under-development" />}
+              />
+              <Route
+                path="/stock-movements/new"
+                element={<ComingSoon pageTitle="Record Stock Movement" pageType="under-development" />}
+              />
+              <Route path="/requests" element={<ComingSoon pageTitle="Item Requests" pageType="under-development" />} />
+
+              {/* Catch all route */}
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+
+              {/* <Route path="/groups" element={<Groups />} />
               <Route path="/brands" element={<Brands />} />
               <Route path="/category" element={<Category />} />
               <Route path="/stores" element={<Stores />} />
@@ -84,7 +148,8 @@ function ProtectedLayout() {
               <Route path="/stock-movements" element={<StockMovementList />} />
               <Route path="/stock-movements/new" element={<StockMovementForm />} />
               <Route path="/requests" element={<Requests />} />
-              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+              <Route path="*" element={<Navigate to="/dashboard" replace />} /> */}
+
             </Routes>
           </div>
         </div>
