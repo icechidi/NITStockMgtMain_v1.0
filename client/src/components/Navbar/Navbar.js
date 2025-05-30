@@ -86,6 +86,20 @@ function Navbar() {
               <FaTachometerAlt className="navbar-nav-icon" /> Dashboard
             </Link>
           </li>
+
+          <li className="navbar-nav-item">
+            <Link to="/stocks" className={`navbar-nav-link ${location.pathname === "/stocks" ? "active" : ""}`}>
+              <FaBoxOpen className="navbar-nav-icon" /> Stocks
+            </Link>
+          </li>
+
+          <li className="navbar-nav-item">
+            <Link to="/stocks-copy" className={`navbar-nav-link ${location.pathname === "/stocks-copy" ? "active" : ""}`}>
+              <FaBoxOpen className="navbar-nav-icon" /> Stocks copy
+            </Link>
+          </li>
+          
+
           <li className="navbar-nav-item">
             <Link to="/items" className={`navbar-nav-link ${location.pathname === "/items" ? "active" : ""}`}>
               <FaBox className="navbar-nav-icon" /> Items
@@ -129,11 +143,7 @@ function Navbar() {
               <FaTags className="navbar-nav-icon" /> Brands
             </Link>
           </li>
-          <li className="navbar-nav-item">
-            <Link to="/stocks" className={`navbar-nav-link ${location.pathname === "/stocks" ? "active" : ""}`}>
-              <FaBoxOpen className="navbar-nav-icon" /> Stocks
-            </Link>
-          </li>
+
           <li className="navbar-nav-item">
             <Link to="/reports" className={`navbar-nav-link ${location.pathname === "/reports" ? "active" : ""}`}>
               <FaChartBar className="navbar-nav-icon" /> Reports

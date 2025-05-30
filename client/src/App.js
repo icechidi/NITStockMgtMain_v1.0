@@ -23,6 +23,8 @@ import StockMovementList from "./components/StockMovements/StockMovementList"
 import StockMovementForm from "./components/StockMovements/StockMovementForm"
 import Requests from "./components/Requests/Requests"
 
+import StocksCopy from "./components/StocksCopy/StocksCopy"
+
 import ComingSoon from "./components/ComingSoon/ComingSoon"
 import ProtectedRoute from "./components/ProtectedRoute"
 
@@ -130,6 +132,7 @@ function ProtectedLayout() {
               <Route path="/stocks" element={<Stocks />} />
               <Route path="/products" element={<Products />} />
 
+              <Route path="/stocks-copy" element={<StocksCopy />} />
 
               {/* Catch all route */}
               <Route path="*" element={<Navigate to="/dashboard" replace />} />

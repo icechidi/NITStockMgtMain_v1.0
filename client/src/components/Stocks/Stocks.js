@@ -1,118 +1,311 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import axios from "axios"
 import "./Stocks.css"
 
 function Stocks() {
   const [stocks, setStocks] = useState([])
   const [stockItems, setStockItems] = useState([])
-  const [categories, setCategories] = useState([])
-  const [stores, setStores] = useState([])
-  const [selectedCategory, setSelectedCategory] = useState('all')
+
+  const [itTemplates] = useState([
+    {
+      id: 1,
+      name: "Desktop Computer",
+      description: "Standard office desktop computer with monitor, keyboard, and mouse",
+      unit_price: 800,
+      minQuantity: 5,
+      category: "Hardware",
+    },
+    {
+      id: 2,
+      name: "Laptop",
+      description: "Business laptop for mobile work",
+      unit_price: 1200,
+      minQuantity: 10,
+      category: "Hardware",
+    },
+    {
+      id: 3,
+      name: 'Monitor 24"',
+      description: "24-inch LED monitor for workstation",
+      unit_price: 250,
+      minQuantity: 8,
+      category: "Hardware",
+    },
+    {
+      id: 4,
+      name: "Wireless Mouse",
+      description: "Ergonomic wireless optical mouse",
+      unit_price: 25,
+      minQuantity: 20,
+      category: "Accessories",
+    },
+    {
+      id: 5,
+      name: "Mechanical Keyboard",
+      description: "Professional mechanical keyboard",
+      unit_price: 120,
+      minQuantity: 15,
+      category: "Accessories",
+    },
+    {
+      id: 6,
+      name: "Network Switch 24-Port",
+      description: "Managed 24-port Gigabit Ethernet switch",
+      unit_price: 300,
+      minQuantity: 3,
+      category: "Networking",
+    },
+    {
+      id: 7,
+      name: "WiFi Router",
+      description: "Enterprise-grade wireless router",
+      unit_price: 200,
+      minQuantity: 5,
+      category: "Networking",
+    },
+    {
+      id: 8,
+      name: "Laser Printer",
+      description: "Black and white laser printer for office use",
+      unit_price: 400,
+      minQuantity: 3,
+      category: "Printers",
+    },
+    {
+      id: 9,
+      name: "UPS Battery Backup",
+      description: "Uninterruptible power supply for critical equipment",
+      unit_price: 150,
+      minQuantity: 10,
+      category: "Power",
+    },
+    {
+      id: 10,
+      name: "External Hard Drive 1TB",
+      description: "Portable external storage drive",
+      unit_price: 80,
+      minQuantity: 15,
+      category: "Storage",
+    },
+    {
+      id: 11,
+      name: "USB Cable Type-C",
+      description: "High-speed USB Type-C cable",
+      unit_price: 15,
+      minQuantity: 30,
+      category: "Cables",
+    },
+    {
+      id: 12,
+      name: "HDMI Cable 6ft",
+      description: "High-definition multimedia interface cable",
+      unit_price: 12,
+      minQuantity: 25,
+      category: "Cables",
+    },
+    {
+      id: 13,
+      name: "Webcam HD",
+      description: "High-definition webcam for video conferencing",
+      unit_price: 60,
+      minQuantity: 12,
+      category: "Accessories",
+    },
+    {
+      id: 14,
+      name: "Headset with Microphone",
+      description: "Professional headset for calls and meetings",
+      unit_price: 45,
+      minQuantity: 20,
+      category: "Accessories",
+    },
+    {
+      id: 15,
+      name: "Server Rack 42U",
+      description: "Standard 42U server rack cabinet",
+      unit_price: 800,
+      minQuantity: 2,
+      category: "Infrastructure",
+    },
+  ])
+
+  const [showTemplates, setShowTemplates] = useState(false)
+  const [selectedTemplate, setSelectedTemplate] = useState(null)
+
   const [showModal, setShowModal] = useState(false)
-  const [showAddItemModal, setShowAddItemModal] = useState(false)
-  const [newStockLocation, setNewStockLocation] = useState({ 
-    location: "", 
-    totalItems: 0, 
-    lowStock: 0, 
-    value: 0,
-    sourceStore: "" 
-  })
+  const [newStockLocation, setNewStockLocation] = useState({ location: "", totalItems: 0, lowStock: 0, value: 0 })
+
+  const [showItemModal, setShowItemModal] = useState(false)
   const [newStockItem, setNewStockItem] = useState({
     name: "",
-    location: "",
+    description: "",
     quantity: 0,
-    minQuantity: 0,
-    category: "",
-    sourceStore: ""
+    unit_price: 0,
+    location: "Main Warehouse",
+    minQuantity: 10,
   })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    fetchStocks()
+    fetchStockLocations()
     fetchStockItems()
-    fetchCategories()
-    fetchStores()
   }, [])
 
-  const fetchStocks = async () => {
+  const fetchStockLocations = async () => {
     try {
-      const response = await axios.get('/api/stocks')
-      setStocks(response.data)
+      const response = await fetch("http://localhost:5000/api/stock-locations")
+      if (response.ok) {
+        const locations = await response.json()
+        setStocks(locations.map(loc => ({
+          id: loc.id,
+          location: loc.location_name,
+          totalItems: loc.total_items,
+          lowStock: loc.low_stock_items,
+          value: loc.total_value
+        })))
+      }
     } catch (error) {
-      console.error('Error fetching stocks:', error)
+      console.error("Error fetching stock locations:", error)
     }
   }
 
   const fetchStockItems = async () => {
     try {
-      const response = await axios.get('/api/stock-items')
-      setStockItems(response.data)
+      const response = await fetch("http://localhost:5000/api/items")
+      if (response.ok) {
+        const items = await response.json()
+        setStockItems(items.map(item => ({
+          id: item.id,
+          name: item.name,
+          location: item.location || 'Unknown',
+          quantity: item.quantity,
+          minQuantity: item.min_quantity,
+          status: item.calculated_status || item.status
+        })))
+      }
     } catch (error) {
-      console.error('Error fetching stock items:', error)
-    }
-  }
-
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get('/api/categories')
-      setCategories(response.data)
-    } catch (error) {
-      console.error('Error fetching categories:', error)
-    }
-  }
-
-  const fetchStores = async () => {
-    try {
-      const response = await axios.get('/api/stores')
-      setStores(response.data)
-    } catch (error) {
-      console.error('Error fetching stores:', error)
+      console.error("Error fetching stock items:", error)
     }
   }
 
   const handleAddStockLocation = async () => {
     try {
-      const response = await axios.post('/api/stocks', newStockLocation)
-      setStocks([...stocks, response.data])
-      setNewStockLocation({ location: "", totalItems: 0, lowStock: 0, value: 0, sourceStore: "" })
+      const response = await fetch("http://localhost:5000/api/stock-locations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          location_name: newStockLocation.location,
+          total_items: Number(newStockLocation.totalItems),
+          total_value: Number(newStockLocation.value),
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to add stock location")
+      }
+
+      const savedLocation = await response.json()
+      
+      // Add to local state
+      setStocks([...stocks, {
+        id: savedLocation.id,
+        location: savedLocation.location_name,
+        totalItems: savedLocation.total_items,
+        lowStock: savedLocation.low_stock_items,
+        value: savedLocation.total_value
+      }])
+
+      setNewStockLocation({ location: "", totalItems: 0, lowStock: 0, value: 0 })
       setShowModal(false)
     } catch (error) {
-      console.error('Error adding stock location:', error)
+      console.error("Error adding stock location:", error)
+      setError("Failed to add stock location. Please try again.")
     }
+  }
+
+  const handleTransferStock = (itemId, newLocation) => {
+    // In a real app, you would send this to your backend
+    setStockItems(stockItems.map((item) => (item.id === itemId ? { ...item, location: newLocation } : item)))
+  }
+
+  const handleTemplateSelect = (template) => {
+    setNewStockItem({
+      ...newStockItem,
+      name: template.name,
+      description: template.description,
+      unit_price: template.unit_price,
+      minQuantity: template.minQuantity,
+    })
+    setShowTemplates(false)
+    setSelectedTemplate(template)
   }
 
   const handleAddStockItem = async () => {
+    setIsSubmitting(true)
+    setError(null)
+
     try {
-      const response = await axios.post('/api/stock-items', newStockItem)
-      setStockItems([...stockItems, response.data])
+      // Find location_id from location name
+      const selectedLocation = stocks.find(stock => stock.location === newStockItem.location)
+      if (!selectedLocation) {
+        setError("Please select a valid location")
+        setIsSubmitting(false)
+        return
+      }
+
+      // Validate required fields
+      if (!newStockItem.name || newStockItem.quantity < 0 || newStockItem.unit_price < 0) {
+        setError("Please fill in all required fields with valid values")
+        setIsSubmitting(false)
+        return
+      }
+
+      // Send to backend API
+      const response = await fetch("http://localhost:5000/api/items", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: newStockItem.name,
+          description: newStockItem.description,
+          quantity: Number(newStockItem.quantity),
+          unit_price: Number(newStockItem.unit_price),
+          location_id: selectedLocation.id,
+          min_quantity: Number(newStockItem.minQuantity),
+          category: "IT Equipment"
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to add item to database")
+      }
+
+      // Refresh data from database
+      await fetchStockItems()
+      await fetchStockLocations()
+
+      // Reset form and close modal
       setNewStockItem({
         name: "",
-        location: "",
+        description: "",
         quantity: 0,
-        minQuantity: 0,
-        category: "",
-        sourceStore: ""
+        unit_price: 0,
+        location: stocks[0]?.location || "Main Warehouse",
+        minQuantity: 10,
       })
+      setShowItemModal(false)
     } catch (error) {
-      console.error('Error adding stock item:', error)
+      console.error("Error adding stock item:", error)
+      setError("Failed to add item. Please try again.")
+    } finally {
+      setIsSubmitting(false)
     }
   }
-
-  const handleTransferStock = async (itemId, newLocation) => {
-    try {
-      await axios.put(`/api/stock-items/${itemId}/transfer`, { newLocation })
-      setStockItems(stockItems.map((item) => 
-        item.id === itemId ? { ...item, location: newLocation } : item
-      ))
-    } catch (error) {
-      console.error('Error transferring stock:', error)
-    }
-  }
-
-  const filteredStockItems = selectedCategory === 'all' 
-    ? stockItems 
-    : stockItems.filter(item => item.category === selectedCategory)
 
   return (
     <div className="stocks-container">
@@ -120,24 +313,12 @@ function Stocks() {
       <p>Monitor and manage your inventory across different locations.</p>
 
       <div className="stock-actions mb-3">
-        <button className="btn btn-primary me-2" onClick={() => setShowModal(true)}>
-          Add New Stock Location
-        </button>
-        <button className="btn btn-success me-2" onClick={() => setShowAddItemModal(true)}>
+        <button className="btn btn-success me-2" onClick={() => setShowItemModal(true)}>
           Add New Stock Item
         </button>
-        <select 
-          className="form-select d-inline-block w-auto ms-2"
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-        >
-          <option value="all">All Categories</option>
-          {categories.map(category => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
+        <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+          Add New Stock Location
+        </button>
       </div>
 
       <div className="stock-overview">
@@ -171,19 +352,16 @@ function Stocks() {
           <thead>
             <tr>
               <th>Item Name</th>
-              <th>Category</th>
               <th>Location</th>
               <th>Quantity</th>
               <th>Status</th>
-              <th>Source Store</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {filteredStockItems.map((item) => (
+            {stockItems.map((item) => (
               <tr key={item.id} className={item.status === "Low Stock" ? "low-stock-row" : ""}>
                 <td>{item.name}</td>
-                <td>{item.category}</td>
                 <td>{item.location}</td>
                 <td>{item.quantity}</td>
                 <td>
@@ -191,7 +369,6 @@ function Stocks() {
                     {item.status}
                   </span>
                 </td>
-                <td>{item.sourceStore}</td>
                 <td>
                   <div className="dropdown">
                     <button
@@ -226,6 +403,7 @@ function Stocks() {
         </table>
       </div>
 
+      {/* Modal for Adding a New Stock Location */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -239,21 +417,6 @@ function Stocks() {
                   value={newStockLocation.location}
                   onChange={(e) => setNewStockLocation({ ...newStockLocation, location: e.target.value })}
                 />
-              </div>
-              <div className="form-group">
-                <label>Source Store</label>
-                <select
-                  className="form-control"
-                  value={newStockLocation.sourceStore}
-                  onChange={(e) => setNewStockLocation({ ...newStockLocation, sourceStore: e.target.value })}
-                >
-                  <option value="">Select Store</option>
-                  {stores.map(store => (
-                    <option key={store.id} value={store.id}>
-                      {store.name}
-                    </option>
-                  ))}
-                </select>
               </div>
               <div className="form-group">
                 <label>Initial Items</label>
@@ -288,34 +451,90 @@ function Stocks() {
         </div>
       )}
 
-      {showAddItemModal && (
+      {/* Modal for Adding a New Stock Item */}
+      {showItemModal && (
         <div className="modal-overlay">
           <div className="modal-content">
             <h3>Add New Stock Item</h3>
-            <form>
+            <div className="template-section">
+              <button
+                type="button"
+                className="btn btn-outline-primary btn-sm mb-3"
+                onClick={() => setShowTemplates(!showTemplates)}
+              >
+                {showTemplates ? "Hide" : "Show"} IT Item Templates
+              </button>
+
+              {showTemplates && (
+                <div className="templates-grid">
+                  <h5>Quick Add Templates</h5>
+                  <div className="templates-container">
+                    {itTemplates.map((template) => (
+                      <div
+                        key={template.id}
+                        className={`template-card ${selectedTemplate?.id === template.id ? "selected" : ""}`}
+                        onClick={() => handleTemplateSelect(template)}
+                      >
+                        <div className="template-header">
+                          <strong>{template.name}</strong>
+                          <span className="template-category">{template.category}</span>
+                        </div>
+                        <div className="template-description">{template.description}</div>
+                        <div className="template-price">${template.unit_price}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+            {error && <div className="alert alert-danger">{error}</div>}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                handleAddStockItem()
+              }}
+            >
               <div className="form-group">
-                <label>Item Name</label>
+                <label>Item Name *</label>
                 <input
                   type="text"
                   className="form-control"
                   value={newStockItem.name}
                   onChange={(e) => setNewStockItem({ ...newStockItem, name: e.target.value })}
+                  required
                 />
               </div>
               <div className="form-group">
-                <label>Category</label>
-                <select
+                <label>Description</label>
+                <textarea
                   className="form-control"
-                  value={newStockItem.category}
-                  onChange={(e) => setNewStockItem({ ...newStockItem, category: e.target.value })}
-                >
-                  <option value="">Select Category</option>
-                  {categories.map(category => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
+                  value={newStockItem.description}
+                  onChange={(e) => setNewStockItem({ ...newStockItem, description: e.target.value })}
+                  rows="3"
+                />
+              </div>
+              <div className="form-group">
+                <label>Quantity *</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={newStockItem.quantity}
+                  onChange={(e) => setNewStockItem({ ...newStockItem, quantity: Number(e.target.value) || 0 })}
+                  min="0"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Unit Price ($) *</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  className="form-control"
+                  value={newStockItem.unit_price}
+                  onChange={(e) => setNewStockItem({ ...newStockItem, unit_price: Number(e.target.value) || 0 })}
+                  min="0"
+                  required
+                />
               </div>
               <div className="form-group">
                 <label>Location</label>
@@ -324,8 +543,7 @@ function Stocks() {
                   value={newStockItem.location}
                   onChange={(e) => setNewStockItem({ ...newStockItem, location: e.target.value })}
                 >
-                  <option value="">Select Location</option>
-                  {stocks.map(stock => (
+                  {stocks.map((stock) => (
                     <option key={stock.id} value={stock.location}>
                       {stock.location}
                     </option>
@@ -333,44 +551,39 @@ function Stocks() {
                 </select>
               </div>
               <div className="form-group">
-                <label>Source Store</label>
-                <select
-                  className="form-control"
-                  value={newStockItem.sourceStore}
-                  onChange={(e) => setNewStockItem({ ...newStockItem, sourceStore: e.target.value })}
-                >
-                  <option value="">Select Store</option>
-                  {stores.map(store => (
-                    <option key={store.id} value={store.id}>
-                      {store.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Quantity</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  value={newStockItem.quantity}
-                  onChange={(e) => setNewStockItem({ ...newStockItem, quantity: parseInt(e.target.value) || 0 })}
-                />
-              </div>
-              <div className="form-group">
-                <label>Minimum Quantity</label>
+                <label>Minimum Quantity Alert</label>
                 <input
                   type="number"
                   className="form-control"
                   value={newStockItem.minQuantity}
-                  onChange={(e) => setNewStockItem({ ...newStockItem, minQuantity: parseInt(e.target.value) || 0 })}
+                  onChange={(e) => setNewStockItem({ ...newStockItem, minQuantity: Number(e.target.value) || 0 })}
+                  min="0"
                 />
               </div>
-              <button type="button" className="btn btn-success" onClick={handleAddStockItem}>
-                Save
-              </button>
-              <button type="button" className="btn btn-secondary" onClick={() => setShowAddItemModal(false)}>
-                Cancel
-              </button>
+              <div className="modal-buttons">
+                <button type="submit" className="btn btn-success" disabled={isSubmitting}>
+                  {isSubmitting ? "Adding..." : "Add Item"}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => {
+                    setShowItemModal(false)
+                    setError(null)
+                    setNewStockItem({
+                      name: "",
+                      description: "",
+                      quantity: 0,
+                      unit_price: 0,
+                      location: "Main Warehouse",
+                      minQuantity: 10,
+                    })
+                  }}
+                  disabled={isSubmitting}
+                >
+                  Cancel
+                </button>
+              </div>
             </form>
           </div>
         </div>
