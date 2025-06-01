@@ -61,7 +61,7 @@
   font-size: 1.5rem;
   font-weight: 700;
   margin: 0;
-  color: #212529;
+  /*color: #212529;*/
 }
 
 .dashboard-stat-card-link {
@@ -81,7 +81,7 @@
 
 /* Card Colors - Enhanced with different background colors */
 .dashboard-blue-card {
-  background-color: #e6f2ff;
+  background-color: #9bc5f3;
 }
 
 .dashboard-blue-card .dashboard-stat-card-icon {
@@ -151,6 +151,8 @@
   background-color: rgba(214, 51, 132, 0.2);
   color: #d63384;
 }
+
+/* Navbar */
 
 /* Chart Containers */
 .dashboard-chart-container {
