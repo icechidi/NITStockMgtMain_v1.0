@@ -1,5 +1,7 @@
 /* Dashboard Container */
 .dashboard-container {
+  background: #0d1b2a; /* or use your navbar's color */
+  min-height: 100vh;
   padding: 15px;
 }
 

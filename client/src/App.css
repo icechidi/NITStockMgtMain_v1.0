@@ -1,20 +1,20 @@
+.main-container {
+  display: flex;
+  flex: 1;
+}
+
 .app-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #f5f7fa; /* Light gray-blue background for dashboard */
-}
-
-.main-container {
-  display: flex;
-  flex: 1;
+  background: #0d1b2a !important;
 }
 
 .content {
   flex: 1;
   padding: 20px;
   overflow-y: auto;
-  background-color: #f5f7fa; /* Matching background color */
+  background-color: #0d1b2a !important;
 }
 
 /* Responsive adjustments */
