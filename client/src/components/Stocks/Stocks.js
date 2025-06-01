@@ -1,11 +1,33 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import "./Stocks.css"
 
 function Stocks() {
-  const [stocks, setStocks] = useState([])
-  const [stockItems, setStockItems] = useState([])
+  const [stocks, setStocks] = useState([
+    { id: 1, location: "A-Block S2", totalItems: 1250, lowStock: 45, value: 125000 },
+    { id: 2, location: "A-Block S2", totalItems: 350, lowStock: 12, value: 42000 },
+    { id: 3, location: "B-Block S1", totalItems: 420, lowStock: 18, value: 51000 },
+    { id: 4, location: "B-Block S2", totalItems: 780, lowStock: 30, value: 95000 },
+    { id: 5, location: "B-Block S3", totalItems: 120, lowStock: 18, value: 51000 },
+    { id: 6, location: "B-Block S4", totalItems: 80, lowStock: 18, value: 51000 },
+  ])
+
+  const [stockItems, setStockItems] = useState([
+    { id: 1, name: "Laptop Dell XPS", location: "Main Warehouse", quantity: 25, minQuantity: 10, status: "In Stock" },
+    { id: 2, name: "iPhone 13", location: "Store A", quantity: 8, minQuantity: 10, status: "Low Stock" },
+    { id: 3, name: 'Samsung TV 55"', location: "Store B", quantity: 15, minQuantity: 5, status: "In Stock" },
+    {
+      id: 4,
+      name: "Logitech Mouse",
+      location: "Distribution Center",
+      quantity: 50,
+      minQuantity: 20,
+      status: "In Stock",
+    },
+    { id: 5, name: "HP Printer", location: "Main Warehouse", quantity: 12, minQuantity: 15, status: "Low Stock" },
+    { id: 6, name: "Mechanical Keyboard", location: "Store A", quantity: 5, minQuantity: 8, status: "Low Stock" },
+  ])
 
   const [itTemplates] = useState([
     {
@@ -142,89 +164,18 @@ function Stocks() {
     description: "",
     quantity: 0,
     unit_price: 0,
-    location: "Main Warehouse",
+    location: "A-Block S2",
     minQuantity: 10,
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState(null)
 
-  useEffect(() => {
-    fetchStockLocations()
-    fetchStockItems()
-  }, [])
-
-  const fetchStockLocations = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/api/stock-locations")
-      if (response.ok) {
-        const locations = await response.json()
-        setStocks(locations.map(loc => ({
-          id: loc.id,
-          location: loc.location_name,
-          totalItems: loc.total_items,
-          lowStock: loc.low_stock_items,
-          value: loc.total_value
-        })))
-      }
-    } catch (error) {
-      console.error("Error fetching stock locations:", error)
-    }
-  }
-
-  const fetchStockItems = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/api/items")
-      if (response.ok) {
-        const items = await response.json()
-        setStockItems(items.map(item => ({
-          id: item.id,
-          name: item.name,
-          location: item.location || 'Unknown',
-          quantity: item.quantity,
-          minQuantity: item.min_quantity,
-          status: item.calculated_status || item.status
-        })))
-      }
-    } catch (error) {
-      console.error("Error fetching stock items:", error)
-    }
-  }
-
-  const handleAddStockLocation = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/api/stock-locations", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          location_name: newStockLocation.location,
-          total_items: Number(newStockLocation.totalItems),
-          total_value: Number(newStockLocation.value),
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error("Failed to add stock location")
-      }
-
-      const savedLocation = await response.json()
-      
-      // Add to local state
-      setStocks([...stocks, {
-        id: savedLocation.id,
-        location: savedLocation.location_name,
-        totalItems: savedLocation.total_items,
-        lowStock: savedLocation.low_stock_items,
-        value: savedLocation.total_value
-      }])
-
-      setNewStockLocation({ location: "", totalItems: 0, lowStock: 0, value: 0 })
-      setShowModal(false)
-    } catch (error) {
-      console.error("Error adding stock location:", error)
-      setError("Failed to add stock location. Please try again.")
-    }
+  const handleAddStockLocation = () => {
+    // In a real app, you would send this to your backend
+    const newId = Math.max(...stocks.map((s) => s.id)) + 1
+    setStocks([...stocks, { ...newStockLocation, id: newId }])
+    setNewStockLocation({ location: "", totalItems: 0, lowStock: 0, value: 0 })
+    setShowModal(false)
   }
 
   const handleTransferStock = (itemId, newLocation) => {
@@ -249,14 +200,6 @@ function Stocks() {
     setError(null)
 
     try {
-      // Find location_id from location name
-      const selectedLocation = stocks.find(stock => stock.location === newStockItem.location)
-      if (!selectedLocation) {
-        setError("Please select a valid location")
-        setIsSubmitting(false)
-        return
-      }
-
       // Validate required fields
       if (!newStockItem.name || newStockItem.quantity < 0 || newStockItem.unit_price < 0) {
         setError("Please fill in all required fields with valid values")
@@ -275,9 +218,6 @@ function Stocks() {
           description: newStockItem.description,
           quantity: Number(newStockItem.quantity),
           unit_price: Number(newStockItem.unit_price),
-          location_id: selectedLocation.id,
-          min_quantity: Number(newStockItem.minQuantity),
-          category: "IT Equipment"
         }),
       })
 
@@ -285,9 +225,33 @@ function Stocks() {
         throw new Error("Failed to add item to database")
       }
 
-      // Refresh data from database
-      await fetchStockItems()
-      await fetchStockLocations()
+      const savedItem = await response.json()
+
+      // Add to local state for immediate UI update
+      const newItem = {
+        id: savedItem.id,
+        name: newStockItem.name,
+        location: newStockItem.location,
+        quantity: Number(newStockItem.quantity),
+        minQuantity: Number(newStockItem.minQuantity),
+        status: Number(newStockItem.quantity) <= Number(newStockItem.minQuantity) ? "Low Stock" : "In Stock",
+      }
+
+      setStockItems([...stockItems, newItem])
+
+      // Update stock location totals
+      setStocks(
+        stocks.map((stock) =>
+          stock.location === newStockItem.location
+            ? {
+                ...stock,
+                totalItems: stock.totalItems + Number(newStockItem.quantity),
+                value: stock.value + Number(newStockItem.quantity) * Number(newStockItem.unit_price),
+                lowStock: newItem.status === "Low Stock" ? stock.lowStock + 1 : stock.lowStock,
+              }
+            : stock,
+        ),
+      )
 
       // Reset form and close modal
       setNewStockItem({
@@ -295,7 +259,7 @@ function Stocks() {
         description: "",
         quantity: 0,
         unit_price: 0,
-        location: stocks[0]?.location || "Main Warehouse",
+        location: "B-Block S2",
         minQuantity: 10,
       })
       setShowItemModal(false)
