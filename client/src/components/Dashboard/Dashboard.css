@@ -90,7 +90,7 @@
 }
 
 .dashboard-green-card {
-  background-color: #e6fff0;
+  background-color: #b3ffd1;
 }
 
 .dashboard-green-card .dashboard-stat-card-icon {
@@ -99,7 +99,7 @@
 }
 
 .dashboard-orange-card {
-  background-color: #fff8e6;
+  background-color: #ffe091;
 }
 
 .dashboard-orange-card .dashboard-stat-card-icon {
@@ -108,7 +108,7 @@
 }
 
 .dashboard-red-card {
-  background-color: #ffe6e6;
+  background-color: #ff9b9b;
 }
 
 .dashboard-red-card .dashboard-stat-card-icon {
@@ -117,7 +117,7 @@
 }
 
 .dashboard-purple-card {
-  background-color: #f0e6ff;
+  background-color: #caa7ff;
 }
 
 .dashboard-purple-card .dashboard-stat-card-icon {
@@ -126,7 +126,7 @@
 }
 
 .dashboard-teal-card {
-  background-color: #e6fff7;
+  background-color: #7effd6;
 }
 
 .dashboard-teal-card .dashboard-stat-card-icon {
@@ -135,7 +135,7 @@
 }
 
 .dashboard-indigo-card {
-  background-color: #e6e6ff;
+  background-color: #b1b1f9;
 }
 
 .dashboard-indigo-card .dashboard-stat-card-icon {
@@ -144,7 +144,7 @@
 }
 
 .dashboard-pink-card {
-  background-color: #ffe6f2;
+  background-color: #f5abcf;
 }
 
 .dashboard-pink-card .dashboard-stat-card-icon {
@@ -156,7 +156,7 @@
 
 /* Chart Containers */
 .dashboard-chart-container {
-  background-color: #fff;
+  background-color: #d0d0d0;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   padding: 20px;
@@ -195,7 +195,7 @@
 }
 
 .dashboard-data-table th {
-  background-color: #f8f9fa;
+  /* background-color: #f8f9fa; */
   color: #495057;
   font-weight: 600;
   text-align: left;
@@ -246,6 +246,12 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 15px;
   margin-bottom: 20px;
+}
+
+.container{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
 }
 
 .dashboard-action-card {
