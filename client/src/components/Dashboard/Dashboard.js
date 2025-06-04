@@ -410,7 +410,7 @@ function Dashboard() {
             <div className="dashboard-chart-header">
               <h5 className="dashboard-chart-title">Category Distribution</h5>
             </div>
-            {/* <Chart
+            <Chart
               chartType="PieChart"
               width="100%"
               height="300px"
@@ -426,7 +426,7 @@ function Dashboard() {
                   easing: "out",
                 },
               }}
-            /> */}
+            />
           </div>
         </div>
       </div>
