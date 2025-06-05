@@ -259,7 +259,7 @@ function Stocks() {
         description: "",
         quantity: 0,
         unit_price: 0,
-        location: "B-Block S2",
+        location: "B-Block S1",
         minQuantity: 10,
       })
       setShowItemModal(false)

@@ -215,6 +215,11 @@ function Dashboard() {
     ["Tools", 18],
   ]
 
+  // Defensive: always provide valid chart data
+  const safeStockTrendData = Array.isArray(stats.stockTrendData) && stats.stockTrendData.length > 1
+    ? stats.stockTrendData
+    : getDefaultStockTrendData();
+
   return (
     <div className="dashboard-container">
       {/* Stats Cards - First Row */}
@@ -380,7 +385,7 @@ function Dashboard() {
               chartType="ColumnChart"
               width="100%"
               height="300px"
-              data={stats.stockTrendData}
+              data={safeStockTrendData}
               options={{
                 title: "",
                 legend: { position: "bottom" },
