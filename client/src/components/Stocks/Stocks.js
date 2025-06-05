@@ -253,7 +253,7 @@ function Stocks() {
         ),
       )
 
-      // Reset form and close modal
+      // Reset form and close modal...
       setNewStockItem({
         name: "",
         description: "",
