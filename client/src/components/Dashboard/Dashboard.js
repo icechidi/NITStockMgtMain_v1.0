@@ -376,33 +376,40 @@ function Dashboard() {
                 </select>
               </div>
             </div>
-            <Chart
-              chartType="ColumnChart"
-              width="100%"
-              height="300px"
-              data={stats.stockTrendData}
-              options={{
-                title: "",
-                legend: { position: "bottom" },
-                hAxis: {
-                  title: "Day",
-                  textStyle: { color: "#6c757d" },
-                },
-                vAxis: {
-                  title: "Quantity",
-                  textStyle: { color: "#6c757d" },
-                },
-                colors: ["#0d6efd", "#dc3545"],
-                chartArea: { width: "80%", height: "70%" },
-                animation: {
-                  startup: true,
-                  duration: 1000,
-                  easing: "out",
-                },
-                isStacked: false,
-                bar: { groupWidth: "70%" },
-              }}
-            />
+            {/* Stock Movement Trends Chart - replaced with a custom SVG bar chart */}
+            {Array.isArray(stats.stockTrendData) && stats.stockTrendData.length > 1 ? (
+              <div style={{ width: "100%", height: 300, display: "flex", alignItems: "flex-end", background: "#f8f9fa", borderRadius: 8, padding: 16 }}>
+                {stats.stockTrendData.slice(1).map((row, idx) => {
+                  const [day, stockIn, stockOut] = row
+                  const max = Math.max(...stats.stockTrendData.slice(1).map(r => Math.max(r[1], r[2]))) || 1
+                  return (
+                    <div key={day} style={{ flex: 1, textAlign: "center", margin: "0 4px" }}>
+                      <div style={{ height: 200, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+                        <div style={{
+                          width: 18,
+                          height: `${(stockIn / max) * 180}px`,
+                          background: "#0d6efd",
+                          marginRight: 2,
+                          borderRadius: 4,
+                          transition: "height 0.5s"
+                        }} title={`Stock In: ${stockIn}`}></div>
+                        <div style={{
+                          width: 18,
+                          height: `${(stockOut / max) * 180}px`,
+                          background: "#dc3545",
+                          marginLeft: 2,
+                          borderRadius: 4,
+                          transition: "height 0.5s"
+                        }} title={`Stock Out: ${stockOut}`}></div>
+                      </div>
+                      <div style={{ fontSize: 12, marginTop: 4 }}>{day}</div>
+                    </div>
+                  )
+                })}
+              </div>
+            ) : (
+              <div className="dashboard-chart-placeholder">No stock movement data available.</div>
+            )}
           </div>
         </div>
         <div className="dashboard-col-md-4">
@@ -410,23 +417,27 @@ function Dashboard() {
             <div className="dashboard-chart-header">
               <h5 className="dashboard-chart-title">Category Distribution</h5>
             </div>
-            <Chart
-              chartType="PieChart"
-              width="100%"
-              height="300px"
-              data={categoryDistributionData}
-              options={{
-                pieHole: 0.4,
-                legend: { position: "bottom" },
-                colors: ["#0d6efd", "#20c997", "#ffc107", "#6f42c1", "#dc3545"],
-                chartArea: { width: "100%", height: "70%" },
-                animation: {
-                  startup: true,
-                  duration: 1000,
-                  easing: "out",
-                },
-              }}
-            />
+            {Array.isArray(categoryDistributionData) && categoryDistributionData.length > 1 ? (
+              <Chart
+                chartType="PieChart"
+                width="100%"
+                height="300px"
+                data={categoryDistributionData}
+                options={{
+                  pieHole: 0.4,
+                  legend: { position: "bottom" },
+                  colors: ["#0d6efd", "#20c997", "#ffc107", "#6f42c1", "#dc3545"],
+                  chartArea: { width: "100%", height: "70%" },
+                  animation: {
+                    startup: true,
+                    duration: 1000,
+                    easing: "out",
+                  },
+                }}
+              />
+            ) : (
+              <div className="dashboard-chart-placeholder">No category data available.</div>
+            )}
           </div>
         </div>
       </div>
@@ -435,9 +446,6 @@ function Dashboard() {
       <div className="dashboard-chart-container">
         <div className="dashboard-chart-header">
           <h5 className="dashboard-chart-title">Recent Stock Movements</h5>
-          <Link to="/stock-movements" className="dashboard-btn dashboard-btn-sm dashboard-btn-outline-primary">
-            View All
-          </Link>
         </div>
         <div className="dashboard-table-responsive">
           <table className="dashboard-data-table">
