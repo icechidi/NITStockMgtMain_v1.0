@@ -14,6 +14,71 @@ body.dark-mode {
   --card-hover: #2c2c2c;
 }
 
+ === General Layout === */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* === Trend Indicators === */
+.trend {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.trend-up {
+  color: #198754; /* green */
+}
+
+.trend-down {
+  color: #dc3545; /* red */
+}
+
+/* === Dark Mode Toggle Button === */
+.dark-mode-toggle {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: var(--card-bg);
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+/* === Skeleton Loader === */
+.skeleton {
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  height: 20px;
+  width: 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* === Card Enhancements === */
+.dashboard-stat-card {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+.dashboard-stat-card:hover {
+  background-color: var(--card-hover);
+}
+
+
+/* Check above will be edited - most of it - but be careful which file to edit */
 /* Dashboard Container */
 .dashboard-container {
   background: #0d1b2a; /* or use your navbar's color */
