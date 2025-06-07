@@ -5,18 +5,8 @@ import { Link } from "react-router-dom"
 import "./Dashboard.css"
 import { Chart } from "react-google-charts"
 import {
-  FaBox,
-  FaExclamationTriangle,
-  FaUsers,
-  FaTools,
-  FaLaptop,
-  FaFileContract,
-  FaShoppingCart,
-  FaTruck,
-  FaPlusCircle,
-  FaExchangeAlt,
-  FaFileAlt,
-  FaSearch,
+  FaBox, FaExclamationTriangle, FaUsers, FaTools, FaLaptop, FaFileContract,
+  FaShoppingCart, FaTruck, FaPlusCircle, FaExchangeAlt, FaFileAlt, FaSearch,
   
 } from "react-icons/fa"
 
@@ -292,8 +282,8 @@ function Dashboard() {
             <FaFileContract />
           </div>
           <div className="dashboard-stat-card-content">
-            <p className="dashboard-stat-card-title">New Licenses</p>
-            <h3 className="dashboard-stat-card-value">{stats.newLicense}</h3>
+            <p className="dashboard-stat-card-title">New Purchases</p>
+            <h3 className="dashboard-stat-card-value">{stats.newPurchases}</h3>
           </div>
           <Link to="/licenses" className="dashboard-stat-card-link">
             View All →
@@ -376,6 +366,7 @@ function Dashboard() {
                 </select>
               </div>
             </div>
+
             {/* Stock Movement Trends Chart - replaced with a custom SVG bar chart */}
             {Array.isArray(stats.stockTrendData) && stats.stockTrendData.length > 1 ? (
               <div style={{ width: "100%", height: 300, display: "flex", alignItems: "flex-end", background: "#f8f9fa", borderRadius: 8, padding: 16 }}>
