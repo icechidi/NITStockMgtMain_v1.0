@@ -1,3 +1,19 @@
+/* === Base Theme Colors === */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #212529;
+  --card-bg: #fff;
+  --card-hover: #f1f1f1;
+}
+
+/* === Dark Mode Overrides === */
+body.dark-mode {
+  --bg-color: #121212;
+  --text-color: #f1f1f1;
+  --card-bg: #1e1e1e;
+  --card-hover: #2c2c2c;
+}
+
 /* Dashboard Container */
 .dashboard-container {
   background: #0d1b2a; /* or use your navbar's color */
