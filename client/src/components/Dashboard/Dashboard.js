@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { Link } from "react-router-dom"
 import "./Dashboard.css"
+import socket from "./components/socket"
 import { Chart } from "react-google-charts"
 import {
   FaBox, FaExclamationTriangle, FaUsers, FaTools, FaLaptop, FaFileContract,
@@ -91,6 +92,21 @@ function Dashboard() {
     // No dependencies here - we only want to fetch once on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+
+  //Added Use Effects to be Edited and Refined
+  //Check
+  useEffect(() => {
+    socket.on("stock-updated", () => {
+      fetchItems();
+      fetchMovements();
+    });
+
+    return () => {
+      socket.off("stock-updated");
+    };
+  }, []);
+
 
   useEffect(() => {
     processStockTrendData(movements, timeframe)

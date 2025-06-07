@@ -14,7 +14,7 @@ body.dark-mode {
   --card-hover: #2c2c2c;
 }
 
- === General Layout === */
+/* === General Layout === */
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
