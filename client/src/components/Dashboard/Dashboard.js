@@ -474,7 +474,7 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Recent Stock Movements */}
+        {/* Recent Stock Movements, shows stock movements */}
         <div className="dashboard-chart-container">
           <div className="dashboard-chart-header">
             <h5 className="dashboard-chart-title">Recent Stock Movements</h5>
