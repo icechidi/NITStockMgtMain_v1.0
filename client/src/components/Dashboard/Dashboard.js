@@ -474,7 +474,7 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Recent Stock Movements, shows stock movements */}
+        {/* Recent Stock Movements, shows recent stock movements */}
         <div className="dashboard-chart-container">
           <div className="dashboard-chart-header">
             <h5 className="dashboard-chart-title">Recent Stock Movements</h5>
@@ -526,7 +526,7 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Low Stock Alert */}
+        {/* Low Stock Alert, to notify the user about low stock items */}
         <div className="dashboard-chart-container">
           <div className="dashboard-chart-header">
             <h5 className="dashboard-chart-title">Low Stock Alerts</h5>
