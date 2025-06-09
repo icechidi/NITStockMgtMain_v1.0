@@ -408,7 +408,7 @@ function Dashboard() {
                 </div>
               </div>
 
-              {/* Stock Movement Trends Chart - replaced with a custom SVG bar chart */}
+              {/* Stock Movement Trends Chart - replaced with a custom SVG bar chart manually updated */}
               {Array.isArray(stats.stockTrendData) && stats.stockTrendData.length > 1 ? (
                 <div style={{ width: "100%", height: 300, display: "flex", alignItems: "flex-end", background: "#f8f9fa", borderRadius: 8, padding: 16 }}>
                   {stats.stockTrendData.slice(1).map((row, idx) => {
