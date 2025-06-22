@@ -1,18 +1,23 @@
 "use client"
-
 import { useState, useEffect, useCallback } from "react"
 import { Link } from "react-router-dom"
+import { motion } from "framer-motion";
 import "./Dashboard.css"
 
 // filepath: c:\Users\Admin\Documents\NITStockMgtMain_v1.0\client\src\components\Dashboard\Dashboard.js
 import socket from "../socket"
-import { Chart } from "react-google-charts"
+import { lazy, Suspense } from "react"
+
+const Chart = lazy(() => import("react-google-charts"))
+
+// import { Chart } from "react-google-charts"
 import {
   FaBox, FaExclamationTriangle, FaUsers, FaTools, FaLaptop, FaFileContract,
   FaShoppingCart, FaTruck, FaPlusCircle, FaExchangeAlt, FaFileAlt, FaSearch,
-  
+
 } from "react-icons/fa"
 
+//Stock Cards
 function Dashboard() {
   const [items, setItems] = useState([])
   const [movements, setMovements] = useState([])
@@ -449,27 +454,31 @@ function Dashboard() {
               <div className="dashboard-chart-header">
                 <h5 className="dashboard-chart-title">Category Distribution</h5>
               </div>
-              {Array.isArray(categoryDistributionData) && categoryDistributionData.length > 1 ? (
-                <Chart
-                  chartType="PieChart"
-                  width="100%"
-                  height="300px"
-                  data={categoryDistributionData}
-                  options={{
-                    pieHole: 0.4,
-                    legend: { position: "bottom" },
-                    colors: ["#0d6efd", "#20c997", "#ffc107", "#6f42c1", "#dc3545"],
-                    chartArea: { width: "100%", height: "70%" },
-                    animation: {
-                      startup: true,
-                      duration: 1000,
-                      easing: "out",
-                    },
-                  }}
-                />
-              ) : (
-                <div className="dashboard-chart-placeholder">No category data available.</div>
-              )}
+
+        {/* Chart for Category Distribution */}
+              <Suspense fallback={<div>Loading chart...</div>}>
+                {Array.isArray(categoryDistributionData) && categoryDistributionData.length > 1 ? (
+                  <Chart
+                    chartType="PieChart"
+                    width="100%"
+                    height="300px"
+                    data={categoryDistributionData}
+                    options={{
+                      pieHole: 0.4,
+                      legend: { position: "bottom" },
+                      colors: ["#0d6efd", "#20c997", "#ffc107", "#6f42c1", "#dc3545"],
+                      chartArea: { width: "100%", height: "70%" },
+                      animation: {
+                        startup: true,
+                        duration: 1000,
+                        easing: "out",
+                      },
+                    }}
+                  />
+                ) : (
+                  <div className="dashboard-chart-placeholder">No category data available.</div>
+                )}
+              </Suspense>
             </div>
           </div>
         </div>
