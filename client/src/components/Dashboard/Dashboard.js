@@ -121,7 +121,7 @@ function Dashboard() {
   }
 }, []);
 
-//End of Processed Use Effects
+//End of Processed Use Effects *check*
 
 
   useEffect(() => {
@@ -129,7 +129,7 @@ function Dashboard() {
   }, [movements, timeframe, processStockTrendData]) // Added processStockTrendData to dependency array
 
   const processFetchedData = () => {
-    // Get low stock items
+    // Get low stock items and update stats
     const lowStockItems = Array.isArray(items) ? items.filter((item) => item.quantity < 10) : []
 
     setStats((prevStats) => ({
