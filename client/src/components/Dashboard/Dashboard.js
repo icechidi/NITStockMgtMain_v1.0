@@ -101,8 +101,7 @@ function Dashboard() {
   }, [])
 
 
-  //Added Use Effects to be Edited and Refined
-  //Check
+  //Added Use Effects to be Edited and Refined *Check*
   useEffect(() => {
     socket.on("stock-updated", () => {
       fetchItems();
