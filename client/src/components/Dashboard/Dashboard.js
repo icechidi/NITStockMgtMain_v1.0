@@ -9,17 +9,6 @@ import { FaBox, FaExclamationTriangle, FaUsers, FaTools, FaLaptop, FaFileContrac
 
 const Chart = lazy(() => import("react-google-charts"))
 
-
-
-  // Pie chart data
-  // const categoryDistributionData = [
-  //   ["Category", "Items"],
-  //   ["Electronics", 45],
-  //   ["Furniture", 28],
-  //   ["Office Supplies", 65],
-  //   ["IT Equipment", 52],
-  //   ["Tools", 20],
-  // ]
   //Stock Cards declearations & Function codes
     const generateCategoryData = (items) => {
     const categoryMap = {};
@@ -139,7 +128,6 @@ function Dashboard() {
 }, []);
 
 //End of Processed Use Effects *check*
-
 
   useEffect(() => {
     processStockTrendData(movements, timeframe)
