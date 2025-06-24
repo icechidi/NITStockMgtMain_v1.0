@@ -17,7 +17,7 @@ import {
 
 } from "react-icons/fa"
 
-//Stock Cards
+//Stock Cardss
 function Dashboard() {
   const [items, setItems] = useState([])
   const [movements, setMovements] = useState([])
@@ -248,20 +248,20 @@ function Dashboard() {
   // ]
 
   // Pie chart data
-  const generateCategoryData = (items) => {
-  const categoryMap = {};
-  items.forEach((item) => {
-    const category = item.category || "Uncategorized";
-    categoryMap[category] = (categoryMap[category] || 0) + 1;
-  });
+    const generateCategoryData = (items) => {
+    const categoryMap = {};
+    items.forEach((item) => {
+      const category = item.category || "Uncategorized";
+      categoryMap[category] = (categoryMap[category] || 0) + 1;
+    });
 
-  const data = [["Category", "Items"]];
-  for (const [category, count] of Object.entries(categoryMap)) {
-    data.push([category, count]);
-  }
+    const data = [["Category", "Items"]];
+    for (const [category, count] of Object.entries(categoryMap)) {
+      data.push([category, count]);
+    }
 
-  return data;
-};
+    return data;
+  };
 
 
   return (
