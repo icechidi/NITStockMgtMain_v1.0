@@ -1,23 +1,39 @@
 "use client"
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, lazy, Suspense } from "react"
 import { Link } from "react-router-dom"
+import socket from "../socket"
 import { motion } from "framer-motion";
 import "./Dashboard.css"
-
-// filepath: c:\Users\Admin\Documents\NITStockMgtMain_v1.0\client\src\components\Dashboard\Dashboard.js
-import socket from "../socket"
-import { lazy, Suspense } from "react"
+import { FaBox, FaExclamationTriangle, FaUsers, FaTools, FaLaptop, FaFileContract, 
+        FaShoppingCart, FaTruck, FaPlusCircle, FaExchangeAlt, FaFileAlt, FaSearch } from "react-icons/fa"
 
 const Chart = lazy(() => import("react-google-charts"))
 
-// import { Chart } from "react-google-charts"
-import {
-  FaBox, FaExclamationTriangle, FaUsers, FaTools, FaLaptop, FaFileContract,
-  FaShoppingCart, FaTruck, FaPlusCircle, FaExchangeAlt, FaFileAlt, FaSearch,
 
-} from "react-icons/fa"
 
-//Stock Cardss
+  // Pie chart data
+  // const categoryDistributionData = [
+  //   ["Category", "Items"],
+  //   ["Electronics", 45],
+  //   ["Furniture", 28],
+  //   ["Office Supplies", 65],
+  //   ["IT Equipment", 52],
+  //   ["Tools", 20],
+  // ]
+  //Stock Cards declearations & Function codes
+    const generateCategoryData = (items) => {
+    const categoryMap = {};
+    items.forEach((item) => {
+      const category = item.category || "Uncategorized";
+      categoryMap[category] = (categoryMap[category] || 0) + 1;
+    });
+
+    const data = [["Category", "Items"]];
+    for (const [category, count] of Object.entries(categoryMap)) {
+      data.push([category, count]);
+    }
+    return data;
+  };
 function Dashboard() {
   const [items, setItems] = useState([])
   const [movements, setMovements] = useState([])
@@ -44,6 +60,7 @@ function Dashboard() {
       setStats((prevStats) => ({ ...prevStats, stockTrendData: getDefaultStockTrendData() }))
       return
     }
+
 
     // Sort movements by date
     const sortedMovements = [...movements].sort((a, b) => new Date(a.movement_date) - new Date(b.movement_date))
@@ -237,33 +254,7 @@ function Dashboard() {
     return <div className="dashboard-error-alert">{error}</div>
   }
 
-  // Pie chart data
-  // const categoryDistributionData = [
-  //   ["Category", "Items"],
-  //   ["Electronics", 45],
-  //   ["Furniture", 28],
-  //   ["Office Supplies", 65],
-  //   ["IT Equipment", 52],
-  //   ["Tools", 20],
-  // ]
-
-  // Pie chart data
-    const generateCategoryData = (items) => {
-    const categoryMap = {};
-    items.forEach((item) => {
-      const category = item.category || "Uncategorized";
-      categoryMap[category] = (categoryMap[category] || 0) + 1;
-    });
-
-    const data = [["Category", "Items"]];
-    for (const [category, count] of Object.entries(categoryMap)) {
-      data.push([category, count]);
-    }
-
-    return data;
-  };
-
-
+//*******************Changed location of the Pie Functions*************************************
   return (
     <>
       {/* Dark mode styles */}
@@ -482,12 +473,12 @@ function Dashboard() {
 
         {/* Chart for Category Distribution */}
               <Suspense fallback={<div>Loading chart...</div>}>
-                {Array.isArray(categoryDistributionData) && categoryDistributionData.length > 1 ? (
+                {Array.isArray(stats.categoryDistributionData) && stats.categoryDistributionData.length > 1 ? (
                   <Chart
                     chartType="PieChart"
                     width="100%"
                     height="300px"
-                    data={categoryDistributionData}
+                    data={stats.categoryDistributionData} // <-- Use stats.categoryDistributionData
                     options={{
                       pieHole: 0.4,
                       legend: { position: "bottom" },
