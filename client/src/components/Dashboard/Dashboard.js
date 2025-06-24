@@ -236,14 +236,29 @@ function Dashboard() {
   }
 
   // Pie chart data
-  const categoryDistributionData = [
-    ["Category", "Items"],
-    ["Electronics", 45],
-    ["Furniture", 28],
-    ["Office Supplies", 65],
-    ["IT Equipment", 52],
-    ["Tools", 20],
-  ]
+  // const categoryDistributionData = [
+  //   ["Category", "Items"],
+  //   ["Electronics", 45],
+  //   ["Furniture", 28],
+  //   ["Office Supplies", 65],
+  //   ["IT Equipment", 52],
+  //   ["Tools", 20],
+  // ]
+
+  const generateCategoryData = (items) => {
+  const categoryMap = {};
+  items.forEach((item) => {
+    const category = item.category || "Uncategorized";
+    categoryMap[category] = (categoryMap[category] || 0) + 1;
+  });
+
+  const data = [["Category", "Items"]];
+  for (const [category, count] of Object.entries(categoryMap)) {
+    data.push([category, count]);
+  }
+
+  return data;
+};
 
 
   return (
