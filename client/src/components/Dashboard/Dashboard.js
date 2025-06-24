@@ -127,10 +127,10 @@ function Dashboard() {
   useEffect(() => {
     processStockTrendData(movements, timeframe)
   }, [movements, timeframe, processStockTrendData]) // Added processStockTrendData to dependency array
-
+  
+  // Get low stock items and update stats
   const processFetchedData = () => {
-    // Get low stock items and update stats
-    const lowStockItems = Array.isArray(items) ? items.filter((item) => item.quantity < 10) : []
+    const lowStockItems = Array.isArray(items) ? items.filter((item) => item.quantity < 10) : [];
 
     setStats((prevStats) => ({
       ...prevStats,
@@ -138,9 +138,11 @@ function Dashboard() {
       lowStockItems: lowStockItems.length,
       itemsForRepair: Array.isArray(items) ? items.filter((item) => item.needsRepair).length : 0,
       recentMovements: Array.isArray(movements) ? movements.slice(0, 5) : [],
-      lowStockItemsList: lowStockItems.slice(0, 3), // Get top 3 low stock items
-    }))
-  }
+      lowStockItemsList: lowStockItems.slice(0, 3),
+      categoryDistributionData: generateCategoryData(items),
+    }));
+  };
+
 
   // Filter movements based on selected timeframe
   const filterMovementsByTimeframe = (movements, timeframe) => {
@@ -245,6 +247,7 @@ function Dashboard() {
   //   ["Tools", 20],
   // ]
 
+  // Pie chart data
   const generateCategoryData = (items) => {
   const categoryMap = {};
   items.forEach((item) => {
