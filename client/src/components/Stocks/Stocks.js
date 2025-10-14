@@ -273,8 +273,8 @@ function Stocks() {
 
   return (
     <div className="stocks-container">
-      <h2>Stock Management</h2>
-      <p>Monitor and manage your inventory across different locations.</p>
+      <h2>Stock Details</h2>
+      <p>Monitor and manage inventory across different locations.</p>
 
       <div className="stock-actions mb-3">
         <button className="btn btn-success me-2" onClick={() => setShowItemModal(true)}>
