@@ -28,10 +28,10 @@ function Dashboard() {
   const [movements, setMovements] = useState([])
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState({
-    totalItems: 0,
-    lowStockItems: 0, // This is the only instance of lowStockItems now
-    totalUsers: 1,
-    itemsForRepair: 0,
+    totalItems: 80,
+    lowStockItems: 1, // This is the only instance of lowStockItems now
+    totalUsers: 3,
+    itemsForRepair: 2,
     newAssets: 5,
     newLicense: 12,
     pendingOrders: 7,
