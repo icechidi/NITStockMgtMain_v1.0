@@ -4,7 +4,7 @@ CREATE DATABASE IF NOT EXISTS nitstockmgt;
 -- Connect to the database
 \c nitstockmgt;
 
--- Create stock_locations table
+-- Create stock_locations table for managing different stock locations
 CREATE TABLE IF NOT EXISTS stock_locations (
     id SERIAL PRIMARY KEY,
     location_name VARCHAR(255) NOT NULL UNIQUE,
@@ -15,14 +15,14 @@ CREATE TABLE IF NOT EXISTS stock_locations (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Update items table to include location reference and additional fields
+-- Update items table to include location reference and additional fields for better stock management
 ALTER TABLE items 
 ADD COLUMN IF NOT EXISTS location_id INTEGER REFERENCES stock_locations(id),
 ADD COLUMN IF NOT EXISTS min_quantity INTEGER DEFAULT 10,
 ADD COLUMN IF NOT EXISTS category VARCHAR(100),
 ADD COLUMN IF NOT EXISTS status VARCHAR(20) DEFAULT 'In Stock';
 
--- Create stock_items view for easier querying
+-- Create stock_items view for easier querying of stock items with location details
 CREATE OR REPLACE VIEW stock_items_view AS
 SELECT 
     i.id,
@@ -44,11 +44,11 @@ SELECT
 FROM items i
 LEFT JOIN stock_locations sl ON i.location_id = sl.id;
 
--- Function to update stock location totals
+-- Function to update stock location totals after item insert/update/delete
 CREATE OR REPLACE FUNCTION update_stock_location_totals()
 RETURNS TRIGGER AS $$
 BEGIN
-    -- Update totals for the affected location(s)
+    -- Update totals for the affected location(s) after item changes
     IF TG_OP = 'DELETE' THEN
         UPDATE stock_locations 
         SET 
