@@ -3,7 +3,7 @@
 import { useState, useEffect, useContext } from "react"
 import { Link, useLocation } from "react-router-dom"
 import {
-  FaUser,
+  // FaUser,
   FaTachometerAlt,
   FaBoxes,
   FaExchangeAlt,
@@ -24,7 +24,7 @@ import "./Navbar.css"
 
 function Navbar() {
   const location = useLocation()
-  const { currentUser, logout } = useContext(AuthContext)
+  const { /*currentUser,*/ logout } = useContext(AuthContext)
   const [mobileOpen, setMobileOpen] = useState(false)
 
   // Close navbar when route changes on mobile
@@ -75,10 +75,10 @@ function Navbar() {
           &times;
         </button>
 
-        <div className="navbar-user-icon-admin">
+        {/* <div className="navbar-user-icon-admin">
           <FaUser />
           <div className="navbar-user-name">{currentUser?.username || "User"}</div>
-        </div>
+        </div> */}
 
         <ul className="navbar-nav">
           <li className="navbar-nav-item">
