@@ -5,7 +5,7 @@ CREATE DATABASE nitstockmgt;
 -- Connect to the database
 \c nitstockmgt;
 
--- Create items table
+-- Create items table for the stock items
 CREATE TABLE items (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE items (
     stock_added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create stock_movements table
+-- Create stock_movements table for tracking stock changes
 CREATE TABLE stock_movements (
     id SERIAL PRIMARY KEY,
     item_id INTEGER REFERENCES items(id),
@@ -28,7 +28,7 @@ CREATE TABLE stock_movements (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create trigger function
+-- Create trigger function to update updated_at column on items table
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -37,7 +37,7 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
--- Create trigger
+-- Create trigger to call the function before any update on items table
 CREATE TRIGGER update_items_updated_at
     BEFORE UPDATE ON items
     FOR EACH ROW
