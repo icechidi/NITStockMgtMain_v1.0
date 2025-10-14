@@ -16,7 +16,7 @@ function Header() {
 
   return (
     <header className="header-container">
-      <h1 className="header-title">Stock Management System</h1>
+      <h1 className="header-title">NIT Stock Mgt System</h1>
 
       {currentUser && (
         <div className="header-actions">
