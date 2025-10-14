@@ -4,7 +4,7 @@ CREATE DATABASE nitstockmgt;
 -- Connect to the database
 \c nitstockmgt;
 
--- Create items table
+-- Create items table for the stock items
 CREATE TABLE IF NOT EXISTS items (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS items (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create stock_movements table
+-- Create stock_movements table for tracking stock changes
 CREATE TABLE IF NOT EXISTS stock_movements (
     id SERIAL PRIMARY KEY,
     item_id INTEGER REFERENCES items(id),
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS stock_movements (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create trigger to update updated_at timestamp
+-- Create trigger to update updated_at timestamp on items table
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
