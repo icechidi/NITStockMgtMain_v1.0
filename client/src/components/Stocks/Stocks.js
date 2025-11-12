@@ -41,7 +41,7 @@ function Stocks() {
     {
       id: 2,
       name: "Laptop",
-      description: "Business laptop for mobile work",
+      description: "High-performance laptop for mobile work",
       unit_price: 1200,
       minQuantity: 10,
       category: "Hardware",
@@ -65,7 +65,7 @@ function Stocks() {
     {
       id: 5,
       name: "Mechanical Keyboard",
-      description: "Professional mechanical keyboard",
+      description: "Professional mechanical keyboard with backlight",
       unit_price: 120,
       minQuantity: 15,
       category: "Accessories",
@@ -73,7 +73,7 @@ function Stocks() {
     {
       id: 6,
       name: "Network Switch 24-Port",
-      description: "Managed 24-port Gigabit Ethernet switch",
+      description: "Managed 24-port Gigabit Ethernet switch with advanced features",
       unit_price: 300,
       minQuantity: 3,
       category: "Networking",
@@ -81,7 +81,7 @@ function Stocks() {
     {
       id: 7,
       name: "WiFi Router",
-      description: "Enterprise-grade wireless router",
+      description: "Enterprise-grade wireless router with dual-band support",
       unit_price: 200,
       minQuantity: 5,
       category: "Networking",
