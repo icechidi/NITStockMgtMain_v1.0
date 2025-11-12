@@ -127,8 +127,8 @@ function Dashboard() {
   }
 }, []);
 
-//End of Processed Use Effects *check*
 
+//End of Processed Use Effects *check*
   useEffect(() => {
     processStockTrendData(movements, timeframe)
   }, [movements, timeframe, processStockTrendData]) // Added processStockTrendData to dependency array
@@ -171,14 +171,7 @@ function Dashboard() {
     return movements.filter((movement) => new Date(movement.movement_date) >= cutoffDate)
   }
 
-  // Group movements by date and movement type *check*
-  // This function groups stock movements by date and type (IN/OUT)
-  // It returns an object where keys are dates and values are objects with IN and OUT quantities
-  // Example: { "Mon": { IN: 10, OUT: 5 }, "Tue": { IN: 8, OUT: 3 }, ... }
-  // This is used to prepare data for the stock trend chart
-  // It assumes movement_date is in a format that can be parsed by Date()
-  // and movement_type is either "IN" or "OUT"
-  // It also assumes quantity is a number or can be converted to a number
+  // Group movements by date and type (IN/OUT)
   // If quantity is not a number, it defaults to 0
   const groupMovementsByDateAndType = (movements) => {
     const groupedData = {}
